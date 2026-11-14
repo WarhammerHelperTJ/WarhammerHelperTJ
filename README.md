@@ -1,6 +1,6 @@
 # Dice Helper
 
-Phone-first web app for Warhammer 40k (11th edition, Orks): build an army, track the game, and get dice-by-dice attack cards.
+Phone-first web app for Warhammer 40k (11th edition, Orks and Emperor's Children): build an army, track the game, and get dice-by-dice attack cards.
 Plain ES modules, no build step, no dependencies. Works offline after the first visit.
 
 ## Run
@@ -9,7 +9,8 @@ Plain ES modules, no build step, no dependencies. Works offline after the first 
 
 ## Test
 
-    npm test
+    npm test         # engine, data and rules tests
+    npm run smoke    # every tab in headless Chrome/Edge (set CHROME_PATH if it is not found)
 
 ## Regenerate data
 

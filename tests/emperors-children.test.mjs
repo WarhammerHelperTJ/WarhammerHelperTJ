@@ -134,3 +134,11 @@ test('Intoxicating Musk is a Fight phase reminder for its bearer’s unit', () =
   assert.ok(names('fight').includes('Intoxicating Musk'));
   assert.ok(!names('shooting').includes('Intoxicating Musk'));
 });
+
+test('target from datasheet with a leader: bodyguard stats, +1 model, CHARACTER keyword', () => {
+  const t = targetFromDatasheet(sheet('infractors'), [sheet('lord-exultant')]);
+  assert.equal(t.name, 'Infractors + Lord Exultant');
+  assert.deepEqual([t.T, t.Sv, t.W, t.models], [5, 3, 2, 6]);
+  assert.ok(t.keywords.includes('CHARACTER') && t.keywords.includes('LORD EXULTANT') && t.keywords.includes('BATTLELINE'));
+  assert.equal(new Set(t.keywords).size, t.keywords.length, 'no duplicate keywords');
+});

@@ -5,6 +5,7 @@ Static phone-first web app. Plain HTML/CSS/JS ES modules, no build step, no depe
 ## Commands
 - `npm start` — dev server on http://localhost:5173 (`tools/serve.mjs`)
 - `npm test` — `node --test`
+- `npm run smoke` — opens every tab for every faction in headless Chrome/Edge; fails on page errors (`tools/smoke.mjs`, set `CHROME_PATH` if not found)
 - `npm run data` — regenerate `data/**/*.json` from `docs/source/*-11e.md`
 
 ## Rules

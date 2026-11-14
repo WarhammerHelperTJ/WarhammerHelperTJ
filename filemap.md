@@ -23,7 +23,7 @@
 - `js/ui/strat-actions.js` — shared stratagem `useStrat` / `undoStrat` (CP, once per phase, `game.usedBy`) and `stratWhen` label; used by Strats and Attack
 - `tests/attack-setup.test.mjs` — `js/attack-setup.js` tests incl. the SPEC definition-of-done Power Klaw card end to end
 - `js/game.js` — pure game helpers: `PHASES`, `combatUnits` (bodyguard + attached characters as one unit), `unitStart`, `newGame`, `phaseKey`, `nextPhase`, `callArmyRule`
-- `js/ui/target.js` — `renderTargetPanel(container)`: opponent target form, faction + unit picker (`targetFromDatasheet`), presets (used by Game and Attack)
+- `js/ui/target.js` — `renderTargetPanel(container)`: opponent target form, faction + unit + leader/support picker (`targetFromDatasheet`), presets (used by Game and Attack)
 - `data/orks/game.json` — hand-written game-view config: army-wide toggle (`armyToggle`), Warlord rules, state labels, `abilityPhases` (ability name → phases it is listed in on the Game view; `[]` = never)
 - `tests/game.test.mjs` — `js/game.js` tests (phase/turn/round, flags, army toggle expiry, combatUnits)
 - `js/data.js` — `loadCore()`, `loadFaction(id)` (incl. optional `game.json` → `faction.game`), `loadFactions()`, `loadExampleRoster(id)` (fetch + in-memory cache), `*ById` lookups, `abilityByName`
@@ -48,7 +48,8 @@
 - `data/orks/example-roster.json` — hand-written 500 pt example roster template (source 2.1); `attachedTo` is a unit index
 - `tests/roster.test.mjs` — `js/roster.js` tests (example total, nth-copy pricing, default groups, attach, DP, enhancements)
 - `tools/build-data.mjs` — source MD per faction (`FACTIONS` list) -> generated JSON (`npm run data`); prints unconsumed lines
-- `tools/serve.mjs` — static dev server on :5173
+- `tools/serve.mjs` — static dev server on :5173 (`PORT` env overrides)
+- `tools/smoke.mjs` — `npm run smoke`: headless Chrome/Edge via DevTools Protocol, every tab × every faction, fails on errors or a stuck "Loading…"
 - `README.md` — run, test, deploy, add a faction, known limits
 - `sw.js` — cache-first service worker (`dicehelper-v1`); precache list between `PRECACHE-START/END` markers, generated; inactive on localhost
 - `tools/build-sw.mjs` — writes the precache list into `sw.js` (`npm run sw`); exports `shellFiles`, `listIn`

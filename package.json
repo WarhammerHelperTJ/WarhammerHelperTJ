@@ -6,6 +6,7 @@
     "start": "node tools/serve.mjs",
     "test": "node --test",
     "data": "node tools/build-data.mjs",
-    "sw": "node tools/build-sw.mjs"
+    "sw": "node tools/build-sw.mjs",
+    "smoke": "node tools/smoke.mjs"
   }
 }

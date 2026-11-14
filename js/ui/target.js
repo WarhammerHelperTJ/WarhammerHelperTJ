@@ -3,20 +3,31 @@
 import { h } from '../dom.js';
 import { get, update } from '../store.js';
 import { loadFactions, loadFaction } from '../data.js';
+import { canAttach } from '../roster.js';
 
 // "Fill from a datasheet": faction list and picked faction are view state; data.js caches the JSON.
-const pick = { factions: null, faction: '', data: null, unit: '' };
+const pick = { factions: null, faction: '', data: null, unit: '', leader: '', support: '' };
 
-/** Datasheet -> target fields: the bodyguard's (largest group's) profile, smallest unit size, invuln, FNP, all keywords. */
-export function targetFromDatasheet(d) {
+/**
+ * Datasheet (+ attached characters) -> target fields: the bodyguard's (largest group's) profile, invuln and FNP,
+ * smallest unit size plus one model per character, every keyword of all of them.
+ * shortcut: T/Sv/W/InSv stay the bodyguard's (attacks are allocated to bodyguard models first); characters only add keywords and models.
+ */
+export function targetFromDatasheet(d, attached = []) {
   const main = [...d.defaultLoadout].sort((a, b) => b.max - a.max)[0];
   const m = d.models.find((x) => x.name === main?.model) ?? d.models[0];
   const fnp = /Feel No Pain (\d)\+/.exec((d.coreAbilities ?? []).join(' '));
-  return {
+  const t = {
     name: d.name, T: m.T, Sv: Math.min(7, m.Sv ?? 7), W: m.W, InSv: d.invuln ?? null, fnp: fnp ? +fnp[1] : null,
     models: d.points[0]?.sizes[0]?.models ?? d.defaultLoadout.reduce((n, g) => n + g.min, 0),
     keywords: d.keywords.map((k) => k.toUpperCase()),
   };
+  for (const c of attached) {
+    t.name += ` + ${c.name}`;
+    t.models += c.points[0]?.sizes[0]?.models ?? 1;
+    t.keywords = [...new Set([...t.keywords, ...c.keywords.map((k) => k.toUpperCase())])];
+  }
+  return t;
 }
 
 function datasheetPicker(container) {
@@ -25,11 +36,26 @@ function datasheetPicker(container) {
     return null;
   }
   const choose = (id) => {
-    pick.faction = id; pick.data = null; pick.unit = '';
+    pick.faction = id; pick.data = null; pick.unit = ''; pick.leader = ''; pick.support = '';
     if (id) loadFaction(id).then((f) => { if (pick.faction === id) pick.data = f; if (container.isConnected) renderTargetPanel(container); });
     renderTargetPanel(container);
   };
   const sheets = pick.data ? [...pick.data.datasheets].sort((a, b) => a.name.localeCompare(b.name)) : [];
+  const unit = sheets.find((x) => x.id === pick.unit);
+  const fill = () => {   // reads pick.* now: the selects' handlers run after this render's `unit` was taken
+    const unit = sheets.find((x) => x.id === pick.unit);
+    const chars = [pick.leader, pick.support].map((id) => sheets.find((x) => x.id === id)).filter(Boolean);
+    if (unit) update((s) => { s.target = { ...s.target, ...targetFromDatasheet(unit, chars) }; });
+  };
+  // characters that can join the picked unit, as in the army builder
+  const joiners = (kind) => (unit ? sheets.filter((c) => c !== unit && canAttach(c, unit) === kind) : []);
+  const charSelect = (kind, label) => {
+    const list = joiners(kind);
+    return list.length ? h('label', { class: 'field' }, h('span', { class: 'muted' }, label),
+      h('select', { 'data-k': `tp-${kind}`, onchange: (e) => { pick[kind] = e.target.value; fill(); } },
+        h('option', { value: '' }, 'None'),
+        list.map((c) => h('option', { value: c.id, selected: c.id === pick[kind] }, c.name)))) : null;
+  };
   return h('div', { class: 'row tp-pick' },
     h('label', { class: 'field' }, h('span', { class: 'muted' }, 'Faction'),
       h('select', { 'data-k': 'tp-faction', onchange: (e) => choose(e.target.value) },
@@ -37,11 +63,11 @@ function datasheetPicker(container) {
         pick.factions.map((f) => h('option', { value: f.id, selected: f.id === pick.faction }, f.name)))),
     pick.faction ? h('label', { class: 'field' }, h('span', { class: 'muted' }, 'Unit'),
       h('select', { 'data-k': 'tp-unit', disabled: !pick.data, onchange: (e) => {
-        const d = sheets.find((x) => x.id === e.target.value);
-        pick.unit = e.target.value;
-        if (d) update((s) => { s.target = { ...s.target, ...targetFromDatasheet(d) }; });
+        pick.unit = e.target.value; pick.leader = ''; pick.support = '';
+        if (sheets.some((x) => x.id === pick.unit)) fill(); else renderTargetPanel(container);
       } }, h('option', { value: '' }, pick.data ? 'Pick a unit…' : 'Loading…'),
-        sheets.map((d) => h('option', { value: d.id, selected: d.id === pick.unit }, d.name)))) : null);
+        sheets.map((d) => h('option', { value: d.id, selected: d.id === pick.unit }, d.name)))) : null,
+    charSelect('leader', 'Leader'), charSelect('support', 'Support'));
 }
 
 const KEYWORDS = ['INFANTRY', 'MONSTER', 'VEHICLE', 'CHARACTER', 'FLY', 'PSYKER', 'MOUNTED', 'TITANIC'];
