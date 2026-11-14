@@ -86,3 +86,44 @@ test('Spiteful Power Trip: Killa Kans +1 to hit vs T6 or less, shooting and figh
   assert.equal(hit('melee', 'Kan Klaw', 7).need, klaw);
   assert.ok(hit('melee', 'Kan Klaw', 6).chips.some((c) => c.source.startsWith('Spiteful Power Trip')));
 });
+
+// ---------- detachments 2-15 and unit abilities ----------
+const atk = (type, ids, dets, wName, modelName, target, ctx, models = 1) => {
+  const fx = effectsForUnit(faction, { datasheetIds: ids, detachmentIds: dets });
+  return computeAttack({ type, groups: [{ weapon: weapon(ids[0], wName), models, modelName }], target: { ...T4, ...target },
+    ctx, effects: fx, unitKeywords: ids.flatMap((i) => [...sheet(i).keywords, sheet(i).name.toUpperCase()]) }).cards[0];
+};
+
+test('Green Tide: Boyz get Sustained Hits 1 in melee, Lethal Hits (non-MONSTER/VEHICLE) after charging', () => {
+  const c = atk('melee', ['boyz'], ['green-tide'], 'Choppa', 'Boy', {}, { phase: 'fight', charged: true }, 9);
+  assert.equal(c.hit.sustained, 1);
+  assert.equal(c.hit.lethal, true);
+  // Nobz (no Tide of Muscle): the detachment's Lethal Hits is non-MONSTER/VEHICLE only
+  const nob = sheet('nobz').weapons.find((x) => x.type === 'melee').name;
+  const nobz = (kw) => atk('melee', ['nobz'], ['green-tide'], nob, 'Nob', { keywords: kw }, { phase: 'fight', charged: true }, 5).hit;
+  assert.equal(nobz(['INFANTRY']).lethal, true);
+  assert.equal(nobz(['VEHICLE']).lethal, false);
+  assert.equal(nobz(['INFANTRY']).sustained, 0, 'Sustained Hits is BOYZ only');
+});
+
+test('Da Big Hunt: Beast Snagga +1 AP only against MONSTER/VEHICLE', () => {
+  const w = sheet('beast-snagga-boyz').weapons.find((x) => x.type === 'melee');
+  const ap = (kw) => atk('melee', ['beast-snagga-boyz'], ['da-big-hunt'], w.name, 'Beast Snagga Boy', { keywords: kw }, { phase: 'fight' }).save.AP;
+  assert.equal(ap(['VEHICLE']), w.AP - 1);
+  assert.equal(ap(['INFANTRY']), w.AP);
+});
+
+test('Madcap Meks Runtified: target -1 T on the wound roll', () => {
+  const w = sheet('mek-gunz').weapons.find((x) => x.type === 'ranged' && typeof x.S === 'number');
+  const ctx = (on) => ({ phase: 'shooting', enabled: on ? ['detachment:madcap-meks:runtified'] : [] });
+  assert.equal(atk('ranged', ['mek-gunz'], ['madcap-meks'], w.name, 'Mek Gun', { T: 5 }, ctx(false)).wound.T, 5);
+  assert.equal(atk('ranged', ['mek-gunz'], ['madcap-meks'], w.name, 'Mek Gun', { T: 5 }, ctx(true)).wound.T, 4);
+});
+
+test('Wurrband: Psychic attacks +1 S, and +1 S per 5 models in the unit', () => {
+  const w = sheet('weirdboy').weapons.find((x) => x.abilities.some((a) => a.name === 'PSYCHIC') && typeof x.S === 'number');
+  const S = (n) => computeAttack({ type: w.type, groups: [{ weapon: w, models: 1, modelName: 'Weirdboy' }], target: T4,
+    ctx: { phase: 'shooting', modelCount: n }, effects: effectsForUnit(faction, { datasheetIds: ['weirdboy'], detachmentIds: ['wurrband'] }) }).cards[0].wound.S;
+  assert.equal(S(1), w.S + 1);
+  assert.equal(S(11), w.S + 3);
+});

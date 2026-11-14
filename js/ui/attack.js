@@ -86,7 +86,8 @@ function view(st) {
     && (!e.when?.unitHas || e.when.unitHas.some((k) => cu.keywords.includes(up(k))))).map((e) => [e.source, e])).values()];
   const turnKey = `${g.round}-${g.turn}|${cu.uid}`;
   const manualOn = ui.manual[turnKey] ?? [];
-  const stratId = (e) => (e.source.startsWith('stratagem:') ? e.source.slice('stratagem:'.length) : null);
+  // "stratagem:<id>" switches on when that stratagem is used on this unit; "stratagem:<id>:<option>" is a toggle (one of its options)
+  const stratId = (e) => { const [kind, id, opt] = e.source.split(':'); return kind === 'stratagem' && !opt ? id : null; };
   const stratOn = (id) => g.used?.[id] === key && g.usedBy?.[id] === cu.uid;
   const enabled = manualFx.filter((e) => (stratId(e) ? stratOn(stratId(e)) : manualOn.includes(e.source))).map((e) => e.source);
 

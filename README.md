@@ -30,7 +30,7 @@ Offline works after the first visit over https (the service worker is skipped on
 
 ## Known limits
 
-- Effects are encoded only for the War Horde detachment and six Ork units, and for the Emperor's Children attack-side rules. Defensive rules ("subtract 1 from the Hit roll" against your unit) are reminders only (Strats pane, Abilities pane), not dice.
+- Effects cover the attack-side rules of all 15 Ork detachments, Ork unit abilities and Emperor's Children. Not modelled: Hunta Rig (+2 A per embarked model), Dreadherder (buffs another unit), Mekwaaagh! Mastermind and Da Boss is Watchin' (use the Riled up toggle). Defensive rules ("subtract 1 from the Hit roll" against your unit) are reminders only (Strats pane, Abilities pane), not dice.
 - Emperor's Children: extra points for optional wargear (Defiler) are not added; the Legions of Excess points cap in Carnival of Excess is not checked.
 - Wargear legality is not enforced.
 - No defending mode.

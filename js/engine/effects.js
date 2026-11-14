@@ -66,7 +66,7 @@ export function applyEffects(weapon, active = [], target = {}) {
   const out = {
     skill: weapon.skill, S: weapon.S, AP: weapon.AP, A: String(weapon.A), D: String(weapon.D),
     abilities: new Map(),           // name -> {name, value?, sources:[]}
-    hit: [], wound: [], critHit: [], critWound: [], rerollHit: [], rerollWound: [], ignoreMods: [],
+    hit: [], wound: [], critHit: [], critWound: [], rerollHit: [], rerollWound: [], ignoreMods: [], targetT: 0,
     chips: { attacks: [], wound: [], save: [], damage: [] },
   };
   const add = (a, source) => {
@@ -89,6 +89,7 @@ export function applyEffects(weapon, active = [], target = {}) {
     if (m.hit) out.hit.push({ v: m.hit, text: `${sign(m.hit)} hit`, source: src });
     if (m.wound) out.wound.push({ v: m.wound, text: `${sign(m.wound)} wound`, source: src });
     if (m.critHit) out.critHit.push({ v: m.critHit, text: `crit on ${m.critHit}+`, source: src });
+    if (m.targetT) { out.targetT += m.targetT; out.chips.wound.push({ text: `${sign(m.targetT)} T (target)`, source: src }); }
     if (m.ignoreMods) out.ignoreMods.push({ rolls: m.ignoreMods, label: src, source: src });   // ["hit", "wound"]: negative modifiers ignored
     if (m.critWound) out.critWound.push({ v: m.critWound, text: `crit wound on ${m.critWound}+`, source: src });
     if (m.rerollHit) out.rerollHit.push({ v: m.rerollHit, source: src });

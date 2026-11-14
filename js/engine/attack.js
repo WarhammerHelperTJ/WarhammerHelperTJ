@@ -96,7 +96,7 @@ function resolve(weapon, type, active, target, ctx) {
   }
 
   // WOUND
-  const S = e.S, T = target.T;
+  const S = e.S, T = Math.max(1, target.T + e.targetT);
   const base = S >= 2 * T ? 2 : S > T ? 3 : S === T ? 4 : 2 * S <= T ? 6 : 5;
   const wChips = [...e.chips.wound], wMods = [...e.wound];
   if (ab('LANCE') && ctx.charged) wMods.push({ v: 1, text: '+1 wound: Lance', source: src('LANCE') });
