@@ -3,6 +3,7 @@ import { h, openSheet } from '../dom.js';
 import { openDatasheet } from './datasheet.js';
 import { get, update, subscribe } from '../store.js';
 import { loadCore, loadFaction, loadFactions, loadExampleRoster, datasheetById, detachmentById, enhancementById, abilityByName } from '../data.js';
+import { encodeRoster } from '../share.js';
 import { MODES, unitPoints, rosterTotal, dpUsed, dpAllowed, dpOk, defaultGroups, canAttach, enhancementAllowed, newUnit, rosterFromTemplate, uid, tierFor, copyNumber } from '../roster.js';
 
 let root, unsub, core, factions = [];
@@ -120,10 +121,24 @@ function editor(roster, fac) {
   ];
 }
 
+// Link that adds a copy of this roster on any device that opens it (the roster rides in the "#" part of the URL).
+async function shareRoster(roster) {
+  const url = `${location.origin}${location.pathname}#/import/${await encodeRoster(roster)}`;
+  const input = h('input', { type: 'text', readonly: true, value: url, 'aria-label': 'Roster link', onfocus: e => e.target.select() });
+  const status = h('p', { class: 'muted small', 'aria-live': 'polite' }, 'Open this link on another device to add a copy of the roster there.');
+  openSheet(`Share "${roster.name}"`, h('div', { class: 'stack' }, input, status,
+    h('button', { type: 'button', class: 'btn primary', onclick: async () => {
+      try { await navigator.clipboard.writeText(url); status.textContent = 'Link copied.'; }
+      catch { input.select(); status.textContent = 'Copy the selected link.'; }
+    } }, 'Copy link'),
+    navigator.share ? h('button', { type: 'button', class: 'btn', onclick: () => navigator.share({ title: roster.name, url }).catch(() => {}) }, 'Share…') : null));
+}
+
 function settingsCard(roster) {
   return h('div', { class: 'card stack' },
     field('Roster name', h('input', { 'data-k': 'name', value: roster.name,
       onchange: e => edit(r => { r.name = e.target.value.trim() || r.name; }) })),
+    h('button', { type: 'button', class: 'btn', 'data-k': 'share', onclick: () => shareRoster(roster) }, 'Share roster link'),
     field('Faction', h('select', { 'data-k': 'faction', onchange: e => {
       if (roster.units.length && !confirm('Changing faction removes all units and detachments.')) { e.target.value = roster.faction; return; }
       edit(r => { r.faction = e.target.value; r.units = []; r.detachments = []; });

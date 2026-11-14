@@ -22,6 +22,10 @@ Plain ES modules, no build step, no dependencies. Works offline after the first 
 Any static host. For GitHub Pages, serve the repo root; all paths are relative, so a sub-path like `/repo/` works.
 Offline works after the first visit over https (the service worker is skipped on localhost so development is never stale).
 
+## Share a roster
+
+Army → open a roster → **Share roster link**. Opening the link on another device adds a copy of the roster there. The roster is inside the part after `#`, which browsers never send to the server.
+
 ## Add a faction
 
 1. Write `docs/source/<faction>-11e.md` (Parts B and C, same format as the Orks file), add it to `FACTIONS` in `tools/build-data.mjs` and run `npm run data`. Optional hand-written files: `data/<faction>/game.json`, `example-roster.json`.

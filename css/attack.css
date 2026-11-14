@@ -29,3 +29,4 @@
 .chip.rr { border-style: dashed; }
 .atk-expected { margin: 0; padding-top: var(--s3); border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; font-weight: 600; }
 .btn.atk-reminder { text-align: left; padding: var(--s2) var(--s4); }
+.atk-total { margin: 0; font-variant-numeric: tabular-nums; }

@@ -34,6 +34,7 @@ const PRECACHE = [
   "js/game.js",
   "js/main.js",
   "js/roster.js",
+  "js/share.js",
   "js/store.js",
   "js/ui/army.js",
   "js/ui/attack.js",

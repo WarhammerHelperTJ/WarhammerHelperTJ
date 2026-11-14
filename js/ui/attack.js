@@ -5,7 +5,7 @@ import { loadCore, loadFaction, abilityByName, stratagemById, detachmentById, en
 import { combatUnits, phaseKey, unitStart } from '../game.js';
 import { availableStratagems } from '../engine/stratagems.js';
 import { effectsForUnit } from '../engine/collect.js';
-import { computeAttack, followAlong } from '../engine/attack.js';
+import { computeAttack, followAlong, summarize } from '../engine/attack.js';
 import { roll } from '../engine/dice.js';
 import { weaponChoices, buildGroups, effectsWithBearers } from '../attack-setup.js';
 import { renderTargetPanel } from './target.js';
@@ -113,8 +113,37 @@ function view(st) {
     contextCard(env, showOverwatch),
     groups.length ? result.cards.map((c, i) => attackCard(env, c, i, follow))
       : h('p', { class: 'muted' }, type === 'melee' ? 'No melee weapon to fight with.' : 'No ranged weapon selected.'),
+    result.cards.length ? totalCard(result.cards, st.target) : null,
+    result.cards.length ? compareCard(st, (t) => computeAttack({ type, groups, target: t, ctx, effects, unitKeywords: cu.keywords }).cards) : null,
     afterCard(env),
   ];
+}
+
+// ---------- whole unit + compare targets ----------
+
+const pct = (p) => (p > 0.995 ? '>99%' : p < 0.005 ? (p > 0 ? '<1%' : '0%') : `${Math.round(p * 100)}%`);
+
+function totalCard(cards, t) {
+  const s = summarize(cards, t);
+  return h('section', { class: 'card stack', 'aria-label': 'Whole unit' },
+    h('h2', null, 'Whole unit'),
+    h('p', { class: 'atk-expected' }, `~${one(s.hits)} hits · ~${one(s.wounds)} wounds · ~${one(s.unsaved)} unsaved · ~${one(s.damage)} damage`),
+    h('p', { class: 'atk-total' }, h('strong', null, `~${one(s.kills)} of ${plural(t.models ?? 1, 'model')} killed`),
+      ` · wipe chance ${pct(s.wipe)}`),
+    cards.length > 1 ? h('p', { class: 'muted small' }, 'Weapon groups resolved one after another; damage still does not spill over between models.') : null);
+}
+
+// Same attack against every saved target preset; tap one to make it the target.
+function compareCard(st, cardsFor) {
+  const presets = st.targets ?? [];
+  if (!presets.length) return h('p', { class: 'muted small' }, 'Save target presets in the target editor to compare targets here.');
+  const rows = presets.map((t) => ({ t, s: summarize(cardsFor(t), t) })).sort((a, b) => b.s.wipe - a.s.wipe || b.s.kills / (b.t.models || 1) - a.s.kills / (a.t.models || 1));
+  return h('section', { class: 'card stack', 'aria-label': 'Compare targets' },
+    h('h2', null, 'Compare targets'),
+    rows.map(({ t, s }) => h('button', { type: 'button', class: 'btn pick', 'data-k': `atk-cmp-${t.name}`, 'aria-pressed': String(t.name === st.target.name),
+      onclick: () => update((x) => { x.target = structuredClone(t); }) },
+      h('span', null, h('strong', null, t.name), h('span', { class: 'muted small' }, ` T${t.T} Sv${t.Sv}+ W${t.W}`)),
+      h('span', null, `~${one(s.kills)}/${t.models} · wipe ${pct(s.wipe)}`))));
 }
 
 // ---------- small components ----------

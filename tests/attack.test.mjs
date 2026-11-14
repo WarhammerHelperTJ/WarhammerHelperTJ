@@ -323,3 +323,25 @@ test('activeEffects: scope, attack type, when, manual', () => {
   assert.ok(!names({ ...base, ctx: { charged: true } }).includes('obj'));
   assert.equal(applyEffects(gun({ S: 4 }), activeEffects(list, base), {}).S, 5);
 });
+
+// ---------- whole unit ----------
+import { summarize } from '../js/engine/attack.js';
+
+test('summarize: one card matches its own expected kills; sure kills give a sure wipe', () => {
+  const res = attack(gun({ A: '6', S: 8, AP: -3, D: '2' }), { T: 4, Sv: 4, W: 2, models: 3 }, { models: 2 });
+  const s = summarize(res.cards, { W: 2, models: 3 });
+  close(s.kills, res.cards[0].expected.kills);
+  assert.ok(s.wipe > 0 && s.wipe < 1);
+  // torrent, auto-wound vs T1, no save, 1 damage vs 2 models of W1: 4 attacks always kill both
+  const sure = attack(torrent({ A: '4', S: 10, AP: -6, D: '1' }), { T: 1, Sv: 7, W: 1, models: 2 });
+  const w = summarize(sure.cards, { W: 1, models: 2 });
+  close(w.wipe, (1 - 1 / 6) ** 0 * 1 - (1 / 6) ** 4 - 4 * (5 / 6) * (1 / 6) ** 3, 1e-9);
+});
+
+test('summarize: two cards carry a wounded model over; kills never exceed the unit', () => {
+  const t = { T: 4, Sv: 7, W: 3, models: 2 };
+  const two = [attack(gun({ A: '10', S: 8, D: '1' }), t).cards[0], attack(blade({ A: '10', S: 8, D: '1', skill: 2 }), t).cards[0]];
+  const s = summarize(two, t);
+  assert.ok(s.kills <= 2 + 1e-9 && s.kills > Math.max(two[0].expected.kills, two[1].expected.kills));
+  close(s.unsaved, two[0].expected.unsaved + two[1].expected.unsaved);
+});

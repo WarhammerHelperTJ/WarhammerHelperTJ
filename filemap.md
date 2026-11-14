@@ -14,6 +14,8 @@
 - `js/main.js` — boot + hash router, lazy-loads `js/ui/<view>.js`
 - `js/dom.js` — `h()` element helper, `openSheet()` bottom sheet
 - `js/store.js` — persisted state (`dicehelper.v1`), `get/update/subscribe`
+- `js/share.js` — roster ⇄ link code (`encodeRoster`/`decodeRoster`: JSON, deflate, base64url, validated); `#/import/<code>` is handled in `js/main.js`
+- `tests/share.test.mjs` — roster link round trip and rejection of damaged/tampered links
 - `css/army.css` — army builder view styles (also `.field`, `.btn.link`, `.btn.danger`, `.spread`, `.small` used by other views)
 - `css/game.css` — game view (three panes: abilities | units | strats) + target panel styles
 - `css/strats.css` — stratagem pane styles
@@ -31,7 +33,7 @@
 - `js/engine/parse.js` — `parseWeaponAbilities(text)`, `KNOWN_ABILITIES` (weapon keyword parser, pure)
 - `js/engine/dice.js` — dice expressions: `parseDice`, `formatDice`, `mean/min/max`, `roll`, `dist` (pure)
 - `js/engine/effects.js` — `activeEffects()` (which effects hold), `applyEffects()` (weapon + effects → final profile), `abilityText()` (pure)
-- `js/engine/attack.js` — `computeAttack()` dice cards + expected values, `followAlong()` (pure)
+- `js/engine/attack.js` — `computeAttack()` dice cards + expected values, `summarize()` whole-unit kills + wipe chance, `followAlong()` (pure)
 - `js/engine/collect.js` — `effectsForUnit(faction, {datasheetIds, detachmentIds, enhancementIds, armyDatasheetIds})` candidate effects for one unit (pure)
 - `js/engine/stratagems.js` — `availableStratagems()`, `stratagemTargets()`, `useStratagem()`, `undoStratagem()`, `phaseReminders()` (pure)
 - `tests/attack.test.mjs` — engine tests incl. the source 2.3 Power Klaw example

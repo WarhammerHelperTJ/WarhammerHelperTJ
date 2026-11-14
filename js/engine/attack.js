@@ -209,7 +209,7 @@ function buildCard(prof, parts, target) {
   };
   const weapons = parts.map(({ name, models: n, modelName, A: a }) => ({ name, models: n, modelName, A: a }));
   const title = weapons.map((w) => `${w.name} ×${w.models}`).join(' + ');
-  return { title, weapons, attacks, hit: prof.hit, wound: prof.wound, save: prof.save, damage: prof.damage, expected };
+  return { title, weapons, attacks, hit: prof.hit, wound: prof.wound, save: prof.save, damage: prof.damage, expected, dist: { events: N, damage: eff } };
 }
 
 // effects: the unit's candidate effects; filtered per group with activeEffects (manual ones need ctx.enabled).
@@ -229,6 +229,48 @@ export function computeAttack({ type, groups = [], target = {}, ctx = {}, effect
   const after = hazards ? [{ label: 'Hazard rolls', rolls: hazards,
     text: `Roll ${hazards} D6, one per [HAZARDOUS] weapon: each 1–2 = ${mw} mortal wound${mw > 1 ? 's' : ''} to your unit.` }] : [];
   return { cards, after };
+}
+
+/**
+ * All cards of one attack against one target, resolved one after another (no spill-over, a wounded model carries over
+ * between cards): -> {hits, wounds, unsaved, damage, kills, wipe} where wipe = chance every model dies.
+ */
+export function summarize(cards, target = {}) {
+  const M = target.models ?? 1, W = target.W ?? 1;
+  const sum = (k) => cards.reduce((s, c) => s + c.expected[k], 0);
+  // state: index k*W + (w-1) = k models dead, w wounds left on the current one; `dead` = whole unit destroyed
+  let s = new Array(M * W).fill(0), dead = 0;
+  s[W - 1] = 1;
+  const step = ([st, d], eff) => {
+    const t = new Array(M * W).fill(0);
+    let dd = d;
+    st.forEach((p0, i) => {
+      if (!p0) return;
+      const k = Math.floor(i / W), w = (i % W) + 1;
+      eff.forEach((pe, x) => {
+        const p = p0 * pe;
+        if (!p) return;
+        if (x < w) t[k * W + w - x - 1] += p;
+        else if (k + 1 >= M) dd += p;
+        else t[(k + 1) * W + W - 1] += p;
+      });
+    });
+    return [t, dd];
+  };
+  for (const c of cards) {
+    const { events: N, damage: eff } = c.dist;
+    let cur = [s, dead];
+    const acc = s.map((p) => p * N[0]);
+    let accDead = dead * N[0];
+    for (let n = 1; n < N.length; n++) {
+      cur = step(cur, eff);
+      cur[0].forEach((p, i) => { acc[i] += N[n] * p; });
+      accDead += N[n] * cur[1];
+    }
+    s = acc; dead = accDead;
+  }
+  const kills = s.reduce((a, p, i) => a + p * Math.floor(i / W), 0) + dead * M;
+  return { hits: sum('hits'), wounds: sum('wounds'), unsaved: sum('unsaved'), damage: sum('damage'), kills, wipe: dead };
 }
 
 // Real results typed by the user -> dice for the next steps. Only inputs present produce outputs.
