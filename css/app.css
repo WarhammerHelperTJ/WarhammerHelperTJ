@@ -1,0 +1,111 @@
+/* Dice Helper — tokens + shared components. Views add css/<view>.css.
+ *
+ * Components (build views against these):
+ *   .card                  surface box with padding + radius
+ *   .chip                  small 13px tag; <span class="src"> inside = muted source
+ *   .pill                  toggle <button aria-pressed="true|false">; pressed = accent + check mark
+ *   .stepper               <div class="stepper"><button>−</button><output>n</output><button>+</button></div>
+ *   .seg                   segmented control: <div class="seg" role="group"> of <button aria-pressed>
+ *   .sheet                 bottom sheet (built by openSheet() in js/dom.js); .sheet-backdrop behind it
+ *   .tabbar                fixed bottom nav; active link has aria-current="page"
+ *   .btn, .btn.primary     buttons (primary = accent fill)
+ *   .big                   28px bold tabular numerals in --dice
+ *   .muted                 muted text;  .crit  crit/warning colour
+ *   .row                   flex row with gap, wraps;  .stack  vertical gap
+ */
+:root {
+  --bg: #14160f; --surface: #1f2318; --surface-2: #2a2f20; --line: #3a4130;
+  --text: #ecefe2; --muted: #9aa38a; --accent: #7bc043; --dice: #f2c230; --crit: #e2572b;
+  --r: 12px; --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px;
+  --tap: 48px; --tabbar-h: 56px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+#view {
+  max-width: 480px; margin: 0 auto; padding: var(--s4);
+  padding-bottom: calc(var(--tabbar-h) + var(--s5) + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; gap: var(--s3); outline: none;
+}
+h1, h2, h3 { margin: 0; line-height: 1.2; }
+h1 { font-size: 22px; } h2 { font-size: 18px; } h3 { font-size: 16px; }
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--dice); outline-offset: 2px; }
+
+.muted { color: var(--muted); }
+.crit { color: var(--crit); }
+.big { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--dice); line-height: 1.1; }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2); }
+.stack { display: flex; flex-direction: column; gap: var(--s3); }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: var(--s4); }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+.btn, .pill, .seg > button, .stepper > button {
+  min-height: var(--tap); border-radius: var(--r); border: 1px solid var(--line);
+  background: var(--surface-2); color: var(--text); padding: 0 var(--s4); cursor: pointer;
+}
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #10130c; font-weight: 700; }
+.btn:disabled, .pill:disabled { opacity: .5; cursor: not-allowed; }
+
+.chip {
+  display: inline-flex; align-items: baseline; gap: var(--s1);
+  font-size: 13px; padding: 2px var(--s2); border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--line);
+}
+.chip .src { color: var(--muted); }
+.chip.crit { border-color: var(--crit); }
+
+.pill { border-radius: 999px; }
+.pill[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #10130c; font-weight: 600; }
+.pill[aria-pressed="true"]::before { content: "\2713\00a0"; } /* state not by colour alone */
+
+.seg { display: flex; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.seg > button { flex: 1; border: 0; border-radius: 0; background: transparent; }
+.seg > button + button { border-left: 1px solid var(--line); }
+.seg > button[aria-pressed="true"] { background: var(--surface-2); color: var(--accent); font-weight: 700; box-shadow: inset 0 -3px 0 var(--accent); }
+
+.stepper { display: inline-flex; align-items: center; gap: var(--s2); }
+.stepper > button { width: var(--tap); padding: 0; font-size: 22px; }
+.stepper > output, .stepper > input { min-width: 3ch; text-align: center; font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stepper > input { width: 4ch; min-height: var(--tap); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); }
+
+.tabbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+  display: flex; justify-content: center;
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.tabbar a {
+  flex: 1; max-width: 120px; min-height: var(--tabbar-h);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); text-decoration: none; font-weight: 600;
+}
+.tabbar a[aria-current="page"] { color: var(--accent); box-shadow: inset 0 3px 0 var(--accent); }
+
+.sheet-backdrop { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,.6); display: flex; align-items: flex-end; justify-content: center; }
+.sheet {
+  width: 100%; max-width: 480px; max-height: 80vh; overflow: auto;
+  background: var(--surface); border: 1px solid var(--line); border-bottom: 0;
+  border-radius: var(--r) var(--r) 0 0;
+  padding: var(--s4) var(--s4) calc(var(--s5) + env(safe-area-inset-bottom));
+  animation: sheet-up .2s ease-out;
+}
+.sheet header { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); margin-bottom: var(--s3); }
+.sheet .sheet-text { white-space: pre-wrap; margin: 0; }
+@keyframes sheet-up { from { transform: translateY(100%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* datasheet in the bottom sheet (js/ui/datasheet.js) */
+.ds-scroll { overflow-x: auto; }
+.ds-scroll table.stats { width: 100%; }
+table.stats .ds-name { white-space: normal; text-align: left; }
+table.stats tr.ds-kw td { text-align: left; white-space: normal; font-size: 13px; }

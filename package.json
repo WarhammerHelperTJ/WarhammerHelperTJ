@@ -1,0 +1,11 @@
+{
+  "name": "dicehelper",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "test": "node --test",
+    "data": "node tools/build-data.mjs",
+    "sw": "node tools/build-sw.mjs"
+  }
+}

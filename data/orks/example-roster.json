@@ -1,0 +1,14 @@
+{
+  "name": "War Horde 500",
+  "mode": "custom",
+  "limit": 500,
+  "detachments": ["war-horde"],
+  "units": [
+    { "datasheetId": "meganobz", "size": 2 },
+    { "datasheetId": "warboss-in-mega-armour", "warlord": true, "attachedTo": 0 },
+    { "datasheetId": "deff-dread" },
+    { "datasheetId": "boyz", "size": 10 },
+    { "datasheetId": "mek", "attachedTo": 3 },
+    { "datasheetId": "gretchin", "size": 10 }
+  ]
+}

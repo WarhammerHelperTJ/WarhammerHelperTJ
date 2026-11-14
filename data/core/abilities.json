@@ -1,0 +1,106 @@
+[
+  {
+    "name": "ANTI",
+    "text": "Unmodified wound roll of Y+ vs keyword X = critical wound"
+  },
+  {
+    "name": "ASSAULT",
+    "text": "Unit can use assault shooting (shoot after advancing)"
+  },
+  {
+    "name": "BLAST",
+    "text": "+1 (or +X) attack dice for every 5 models in the target unit (round down)"
+  },
+  {
+    "name": "CLEAVE",
+    "text": "If ALL of that weapon's attacks target one unit: +X attack dice for every 5 models in the target unit (round down)"
+  },
+  {
+    "name": "CLOSE-QUARTERS",
+    "text": "See A1"
+  },
+  {
+    "name": "PISTOL",
+    "text": "See A1"
+  },
+  {
+    "name": "DEADLY DEMISE",
+    "text": "When the model is destroyed, roll D6: on a 6, every unit within 6\" suffers X mortal wounds"
+  },
+  {
+    "name": "DEVASTATING WOUNDS",
+    "text": "Critical wound: no save, target suffers mortal wounds equal to D. These mortal wounds can only damage ONE model per critical wound (excess lost). Resolved after normal damage"
+  },
+  {
+    "name": "EXTRA ATTACKS",
+    "text": "Used in addition to the model's other melee weapon"
+  },
+  {
+    "name": "FEEL NO PAIN",
+    "text": "See A2"
+  },
+  {
+    "name": "HAZARDOUS",
+    "text": "See A2"
+  },
+  {
+    "name": "HEAVY",
+    "text": "Your Shooting phase: +1 to hit if unit is unengaged, was not set up this turn, and no model moved more than 3\""
+  },
+  {
+    "name": "IGNORES COVER",
+    "text": "Target can't get the benefit of cover (incl. Stealth)"
+  },
+  {
+    "name": "INDIRECT FIRE",
+    "text": "Can use indirect shooting"
+  },
+  {
+    "name": "LANCE",
+    "text": "+1 to wound if the attacker charged this turn"
+  },
+  {
+    "name": "LETHAL HITS",
+    "text": "Critical hit can auto-wound"
+  },
+  {
+    "name": "MELTA",
+    "text": "Target within half range: +X to D"
+  },
+  {
+    "name": "ONE SHOT",
+    "text": "Usable once per battle"
+  },
+  {
+    "name": "PRECISION",
+    "text": "Attacker can allocate to a visible CHARACTER group"
+  },
+  {
+    "name": "PSYCHIC",
+    "text": "Can ignore any modifiers to BS/WS and to the hit roll"
+  },
+  {
+    "name": "RAPID FIRE",
+    "text": "Target within half range: +X attack dice"
+  },
+  {
+    "name": "STEALTH",
+    "text": "Every model in the unit has it: the unit has the benefit of cover vs ranged attacks"
+  },
+  {
+    "name": "SUSTAINED HITS",
+    "text": "Critical hit = X extra hits"
+  },
+  {
+    "name": "TORRENT",
+    "text": "Auto-hits"
+  },
+  {
+    "name": "TWIN-LINKED",
+    "text": "Can re-roll the wound roll"
+  },
+  {
+    "name": "DAMAGED",
+    "text": "While the model has X or fewer wounds left: its attacks have -1 to hit"
+  }
+]

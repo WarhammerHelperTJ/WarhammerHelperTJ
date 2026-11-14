@@ -1,0 +1,58 @@
+# File map
+
+- `CLAUDE.md` — commands and conventions for agents
+- `docs/SPEC.md` — tech spec: stack, data model, engine contract, design
+- `docs/PLAN.md` — task list and status
+- `docs/source/orks-11e.md` — product spec + rules data (source of truth, read-only); Part A is the shared core rules
+- `docs/source/emperors-children-11e.md` — Emperor's Children Parts B and C from Wahapedia (source of truth)
+- `data/emperors-children/effects.json` — hand-written effects overlay for Emperor's Children (same schema as the Orks one)
+- `data/emperors-children/game.json` — hand-written: `abilityPhases` (Intoxicating Musk in Fight)
+- `tests/emperors-children.test.mjs` — Emperor's Children data, keyword matching, enhancements, leaders, effects
+- `package.json` — npm scripts (start, test, data); no dependencies
+- `index.html` — app shell: `<main id="view">` + bottom tab bar
+- `css/app.css` — design tokens + shared components (class list in its top comment)
+- `js/main.js` — boot + hash router, lazy-loads `js/ui/<view>.js`
+- `js/dom.js` — `h()` element helper, `openSheet()` bottom sheet
+- `js/store.js` — persisted state (`dicehelper.v1`), `get/update/subscribe`
+- `css/army.css` — army builder view styles (also `.field`, `.btn.link`, `.btn.danger`, `.spread`, `.small` used by other views)
+- `css/game.css` — game view (three panes: abilities | units | strats) + target panel styles
+- `css/strats.css` — stratagem pane styles
+- `css/attack.css` — attack view styles (dice card rows, tappable chips, follow-along steppers)
+- `js/attack-setup.js` — pure Attack-view selection: `weaponChoices` (per model group: one melee + Extra Attacks, close-quarters either/or, profiles, models attacking), `buildGroups` → `computeAttack` groups, `effectsWithBearers`
+- `js/ui/attack.js` — Attack view: unit, Shoot/Fight, weapons, target, stratagems/manual effects, context toggles, dice cards (Math / Follow-along), after attacking
+- `js/ui/strat-actions.js` — shared stratagem `useStrat` / `undoStrat` (CP, once per phase, `game.usedBy`) and `stratWhen` label; used by Strats and Attack
+- `tests/attack-setup.test.mjs` — `js/attack-setup.js` tests incl. the SPEC definition-of-done Power Klaw card end to end
+- `js/game.js` — pure game helpers: `PHASES`, `combatUnits` (bodyguard + attached characters as one unit), `unitStart`, `newGame`, `phaseKey`, `nextPhase`, `callArmyRule`
+- `js/ui/target.js` — `renderTargetPanel(container)`: opponent target form, faction + unit picker (`targetFromDatasheet`), presets (used by Game and Attack)
+- `data/orks/game.json` — hand-written game-view config: army-wide toggle (`armyToggle`), Warlord rules, state labels, `abilityPhases` (ability name → phases it is listed in on the Game view; `[]` = never)
+- `tests/game.test.mjs` — `js/game.js` tests (phase/turn/round, flags, army toggle expiry, combatUnits)
+- `js/data.js` — `loadCore()`, `loadFaction(id)` (incl. optional `game.json` → `faction.game`), `loadFactions()`, `loadExampleRoster(id)` (fetch + in-memory cache), `*ById` lookups, `abilityByName`
+- `js/roster.js` — pure army-building helpers: points (nth-copy tiers, override), totals, DP budget, default loadout groups, leader/support attach, enhancement restriction heuristic, `newUnit`, `rosterFromTemplate`
+- `js/engine/parse.js` — `parseWeaponAbilities(text)`, `KNOWN_ABILITIES` (weapon keyword parser, pure)
+- `js/engine/dice.js` — dice expressions: `parseDice`, `formatDice`, `mean/min/max`, `roll`, `dist` (pure)
+- `js/engine/effects.js` — `activeEffects()` (which effects hold), `applyEffects()` (weapon + effects → final profile), `abilityText()` (pure)
+- `js/engine/attack.js` — `computeAttack()` dice cards + expected values, `followAlong()` (pure)
+- `js/engine/collect.js` — `effectsForUnit(faction, {datasheetIds, detachmentIds, enhancementIds, armyDatasheetIds})` candidate effects for one unit (pure)
+- `js/engine/stratagems.js` — `availableStratagems()`, `stratagemTargets()`, `useStratagem()`, `undoStratagem()`, `phaseReminders()` (pure)
+- `tests/attack.test.mjs` — engine tests incl. the source 2.3 Power Klaw example
+- `tests/effects-data.test.mjs` — effects.json ids, `effectsForUnit` + `computeAttack` on real data
+- `tests/stratagems.test.mjs` — stratagem availability/eligibility, `useStratagem`, phase reminders
+- `js/ui/` — one view per file (army, game, attack), each exports `render(root)`
+- `js/ui/strats.js` — `stratsPane(state, roster, faction, core)`: stratagem pane of the Game view (no tab of its own)
+- `js/ui/datasheet.js` — `openDatasheet(datasheets, title)`: full datasheet in the bottom sheet (used by Army and Game unit names)
+- `data/core/abilities.json`, `data/core/stratagems.json` — generated from source A3 / A4
+- `data/orks/datasheets.json`, `data/orks/detachments.json` — generated from source Part C / Part B
+- `data/emperors-children/datasheets.json`, `data/emperors-children/detachments.json` — generated from `emperors-children-11e.md`
+- `data/orks/effects.json` — hand-written effects overlay (SPEC schema; extra `grant:true` = buff another unit's ability gives)
+- `data/factions.json` — hand-written list of factions with data `[{id,name}]`
+- `data/orks/example-roster.json` — hand-written 500 pt example roster template (source 2.1); `attachedTo` is a unit index
+- `tests/roster.test.mjs` — `js/roster.js` tests (example total, nth-copy pricing, default groups, attach, DP, enhancements)
+- `tools/build-data.mjs` — source MD per faction (`FACTIONS` list) -> generated JSON (`npm run data`); prints unconsumed lines
+- `tools/serve.mjs` — static dev server on :5173
+- `README.md` — run, test, deploy, add a faction, known limits
+- `sw.js` — cache-first service worker (`dicehelper-v1`); precache list between `PRECACHE-START/END` markers, generated; inactive on localhost
+- `tools/build-sw.mjs` — writes the precache list into `sw.js` (`npm run sw`); exports `shellFiles`, `listIn`
+- `tests/sw.test.mjs` — fails when the `sw.js` precache list differs from files on disk
+- `manifest.webmanifest`, `icon.svg` — PWA manifest and flat die-face icon
+- `tests/` — `node --test` suites (`data.test.mjs`: generated JSON vs source, parser, data.js)
+- `.claude/launch.json` — dev server config for the preview pane

@@ -1,0 +1,49 @@
+/* Army builder view (js/ui/army.js). Shared components live in app.css. */
+.army-bar {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s3);
+  margin: calc(-1 * var(--s4)) calc(-1 * var(--s4)) 0; padding: var(--s2) var(--s4);
+  background: var(--bg); border-bottom: 1px solid var(--line);
+}
+.army-total { text-align: right; }
+.spread { justify-content: space-between; }
+.grow { flex: 1; text-align: left; }
+.small { font-size: 13px; }
+
+.field { display: flex; flex-direction: column; gap: var(--s1); flex: 1; min-width: 140px; }
+.field input, .field select, .loadout select {
+  min-height: var(--tap); padding: 0 var(--s3); width: 100%;
+  background: var(--bg); border: 1px solid var(--line); border-radius: var(--r);
+}
+.loadout select { width: auto; flex: 1; }
+
+.btn.link { background: none; border-color: transparent; color: var(--accent); text-decoration: underline; padding: 0 var(--s2); text-align: left; }
+.btn.rule { font-size: 14px; padding: 0 var(--s3); }
+.btn.danger { border-color: var(--crit); color: var(--crit); }
+.btn.x { width: var(--tap); padding: 0; }
+.btn.pick { display: flex; align-items: center; gap: var(--s2); text-align: left; }
+.btn.pick > span:first-child { flex: 1; }
+.chip.badge { border-color: var(--dice); color: var(--dice); }
+
+.unit { padding: 0; }
+.unit-head {
+  width: 100%; min-height: var(--tap); padding: var(--s3) var(--s4);
+  display: grid; grid-template-columns: 1fr auto; gap: var(--s1) var(--s2); align-items: baseline;
+  background: none; border: 0; text-align: left; cursor: pointer; border-radius: var(--r);
+}
+.unit > .unit-name { font-weight: 700; min-height: var(--tap); padding: var(--s3) var(--s4) 0; }
+.unit > .unit-name + .unit-head { padding-top: 0; }
+.unit-head .unit-pts { grid-row: 1; grid-column: 2; font-weight: 700; color: var(--dice); font-variant-numeric: tabular-nums; }
+.unit-head .row { grid-column: 1 / -1; }
+.unit-head[aria-expanded="true"] { box-shadow: inset 3px 0 0 var(--accent); }
+.unit-body { padding: 0 var(--s4) var(--s4); }
+.nested { padding: 0 var(--s3) var(--s3) var(--s5); }
+.unit.attached { background: var(--surface-2); }
+
+.group { border-top: 1px solid var(--line); padding-top: var(--s3); }
+.weapon { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: var(--r); }
+.wargear-text { margin: 0; padding-left: var(--s5); font-size: 14px; }
+
+table.stats { border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.stats th, table.stats td { padding: var(--s1) var(--s2); border-bottom: 1px solid var(--line); text-align: center; }
+table.stats tbody th { text-align: left; }

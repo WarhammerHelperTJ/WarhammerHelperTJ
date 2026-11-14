@@ -1,0 +1,27 @@
+[
+  { "source": "armyrule:waaagh", "label": "Waaagh! (riled up)", "scope": "unit", "attack": "ranged",
+    "when": { "riledUp": true }, "mods": { "abilities": ["ASSAULT"] } },
+
+  { "source": "detachment:war-horde", "label": "Get Stuck In (War Horde)", "scope": "unit", "attack": "melee",
+    "mods": { "abilities": ["SUSTAINED HITS 1"] } },
+  { "source": "enhancement:headwoppas-killchoppa", "label": "Headwoppa's Killchoppa (War Horde)", "scope": "model", "attack": "melee",
+    "when": { "charged": true }, "mods": { "ap": 1 } },
+  { "source": "stratagem:hit-em-harder", "label": "Hit 'Em Harder (War Horde)", "scope": "unit", "attack": "melee",
+    "mods": { "abilities": ["LETHAL HITS"] }, "manual": true },
+  { "source": "stratagem:mow-em-down", "label": "Mow 'Em Down (War Horde)", "scope": "unit", "attack": "melee",
+    "when": { "charged": true }, "mods": { "bump": { "CLEAVE": 1 } }, "manual": true },
+  { "source": "stratagem:close-range-dakka", "label": "Close-Range Dakka (War Horde)", "scope": "unit", "attack": "ranged",
+    "mods": { "bump": { "RAPID FIRE": 1 } }, "manual": true },
+
+  { "source": "ability:meganobz:krumpin-time", "label": "Krumpin' Time (Meganobz)", "scope": "unit", "attack": "any",
+    "when": { "phase": "fight", "riledUp": true }, "mods": { "hit": 1 } },
+  { "source": "ability:boyz:tide-of-muscle", "label": "Tide of Muscle (Boyz)", "scope": "unit", "attack": "melee",
+    "when": { "phase": "fight", "charged": true }, "mods": { "abilities": ["LETHAL HITS"] } },
+  { "source": "ability:boyz:ammo-runts", "label": "Ammo Runts (Boyz, once per battle)", "scope": "unit", "attack": "ranged",
+    "when": { "phase": "shooting" }, "mods": { "hit": 1 }, "manual": true },
+  { "source": "ability:mek:kustom-dakka", "label": "Kustom Dakka (Mek)", "scope": "unit", "attack": "ranged",
+    "mods": { "abilities": ["IGNORES COVER"] } },
+  { "source": "ability:mek:clever-know-wotz", "label": "Clever Know-wotz (Mek: VEHICLE model picked in your Movement phase)", "scope": "unit", "attack": "any",
+    "when": { "unitHas": ["VEHICLE"] }, "mods": { "hit": 1 }, "manual": true, "grant": true },
+  {"source":"ability:killa-kans:spiteful-power-trip","label":"Spiteful Power Trip (Killa Kans: target T6 or less)","scope":"unit","attack":"any","when":{"targetMaxT":6},"mods":{"hit":1}}
+]

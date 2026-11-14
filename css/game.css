@@ -1,0 +1,45 @@
+/* Game view (js/ui/game.js) + target panel (js/ui/target.js). Shared components live in app.css. */
+.game-head .turn { font-weight: 700; padding: var(--s1) var(--s3); border: 1px solid var(--line); border-radius: 999px; }
+.game-head .turn.mine { border-color: var(--accent); color: var(--accent); }
+.game-head .nowrap { flex-wrap: nowrap; }
+
+/* 5-step phase indicator; current step is bold, underlined and marked, not only coloured */
+.phases { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--s1); }
+.phases li {
+  text-align: center; font-size: 12px; padding: var(--s2) 0; overflow-wrap: anywhere;
+  border-radius: var(--s2); background: var(--surface-2); color: var(--muted);
+}
+.phases li::before { content: "\00a0"; display: block; font-size: 10px; }
+.phases li[aria-current="step"] { color: var(--text); font-weight: 700; box-shadow: inset 0 -3px 0 var(--accent); }
+.phases li[aria-current="step"]::before { content: "\25B6"; }
+
+.game-unit .unit-title { font-weight: 700; font-size: 17px; align-self: flex-start; }
+.game-unit .pill { font-size: 14px; padding: 0 var(--s3); }
+
+/* primary action stays in the lower half, just above the tab bar */
+.game-next { position: sticky; bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom) + var(--s2)); z-index: 4; }
+.game-next .btn { width: 100%; font-size: 18px; min-height: 56px; box-shadow: 0 4px 16px rgba(0,0,0,.5); }
+
+.tp-grid { display: flex; flex-direction: column; gap: var(--s2); }
+.tp-num { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); }
+.tp-seg .seg > button { padding: 0; min-width: 0; }
+.target-panel .pill { font-size: 14px; padding: 0 var(--s3); }
+
+.btn.passive { display: block; text-align: left; white-space: normal; }
+
+/* Three panes. Phone: header, switch, one pane. Wide: abilities | header + units | strats. */
+.game-cols { display: flex; flex-direction: column; gap: var(--s4); }
+@media (max-width: 999px) { .game-cols > .pane:not(.on) { display: none; } }
+@media (min-width: 1000px) {
+  #view:has(.game-cols) { max-width: 1440px; }
+  .game-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto minmax(0, 1fr);
+    /* fills the screen above the Next button and tab bar, so each pane scrolls on its own */
+    height: calc(100dvh - var(--tabbar-h) - env(safe-area-inset-bottom) - 56px - 4 * var(--s4)); min-height: 320px; }
+  .game-cols > .pane { overflow-y: auto; min-height: 0; padding-right: var(--s2); }
+  .game-cols > .pane > * { flex-shrink: 0; }
+  .game-cols > .seg { display: none; }
+  .game-cols > .game-head, .game-cols > .pane-units { grid-column: 2; }
+  .game-cols > .pane-abilities { grid-column: 1; grid-row: 1 / span 2; }
+  .game-cols > .pane-strats { grid-column: 3; grid-row: 1 / span 2; }
+  .game-next { max-width: 448px; margin: 0 auto; }
+}

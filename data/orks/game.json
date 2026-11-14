@@ -1,0 +1,16 @@
+{
+  "armyToggle": { "armyRuleId": "waaagh", "label": "Waaagh! called", "state": "riled" },
+  "warlordRules": [{ "armyRuleId": "da-boss", "cpPerRound": 1 }],
+  "abilityPhases": {
+    "Krushin' Impetus": ["charge"],
+    "Taktikal Know-wotz": [],
+    "Da Boss": [],
+    "Downtrodden": [],
+    "That'll Learn Ya": ["command"],
+    "Rokkit Charge": ["fight"],
+    "Nowhere to Hide": ["shooting"],
+    "More Dakka": ["shooting"],
+    "Spiteful Power Trip": ["shooting", "fight"]
+  },
+  "stateLabels": { "riled": "Riled up" }
+}

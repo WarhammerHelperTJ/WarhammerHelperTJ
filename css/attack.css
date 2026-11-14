@@ -1,0 +1,31 @@
+/* Attack view (js/ui/attack.js). Shared components live in app.css. */
+.atk-group { border-top: 1px solid var(--line); padding-top: var(--s3); gap: var(--s2); }
+.atk-group .seg > button, .atk-card .seg > button { padding: 0 var(--s2); min-width: 0; overflow-wrap: anywhere; }
+.atk-group .pill, .atk-ctx .pill { font-size: 14px; padding: 0 var(--s3); align-self: flex-start; }
+
+.atk-num { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s1) var(--s2); }
+.atk-msg { margin: 0; color: var(--crit); font-weight: 700; }
+.atk-msg::before { content: "!\00a0"; }   /* warning not by colour alone */
+
+.atk-strat { border-top: 1px solid var(--line); padding-top: var(--s3); gap: var(--s2); }
+.atk-strat .rules-text { white-space: pre-wrap; margin: 0; }
+.atk-strat .pill { align-self: flex-start; }
+.atk-reason { margin: 0; font-weight: 700; }
+.atk-reason::before { content: "\2715\00a0"; }
+
+.atk-card h3 { overflow-wrap: anywhere; }
+.atk-card .btn.link.atk-wname { padding: 0; min-height: var(--tap); font: inherit; font-weight: 700; }
+.atk-vs { margin: 0 0 var(--s2); }
+.atk-step { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: var(--s2); padding: var(--s3) 0; border-top: 1px solid var(--line); }
+.atk-step-name { font-weight: 700; color: var(--muted); overflow-wrap: anywhere; }
+.atk-step-body { display: flex; flex-direction: column; gap: var(--s1); min-width: 0; }
+.atk-step-body p { margin: 0; }
+.atk-step-body > .btn { align-self: flex-start; }
+.atk-dice { font-weight: 700; color: var(--dice); }
+.atk-chips { gap: 0 var(--s1); }
+.chip-btn { min-height: var(--tap); padding: 0; background: none; border: 0; cursor: pointer; text-align: left; max-width: 100%; }
+.chip-btn .chip { text-decoration: underline dotted; text-underline-offset: 3px; }   /* tappable: underlined, not only coloured */
+.atk-chips .chip { flex-wrap: wrap; max-width: 100%; }
+.chip.rr { border-style: dashed; }
+.atk-expected { margin: 0; padding-top: var(--s3); border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; font-weight: 600; }
+.btn.atk-reminder { text-align: left; padding: var(--s2) var(--s4); }

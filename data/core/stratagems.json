@@ -1,0 +1,152 @@
+[
+  {
+    "id": "command-re-roll",
+    "name": "COMMAND RE-ROLL",
+    "cp": 1,
+    "detachment": null,
+    "turn": "either",
+    "phases": [
+      "any"
+    ],
+    "when": "Any phase, just after you make one of these rolls for a friendly unit/model: advance, charge, damage, hazard, hit, save, wound, or a roll for the number of attacks of a weapon.",
+    "target": null,
+    "effect": "Re-roll that roll. If you rolled several dice together, re-roll one of them (charge rolls are re-rolled in full).",
+    "restrictions": null,
+    "text": "COMMAND RE-ROLL — 1CP — [Either turn, Any phase]\nWHEN: Any phase, just after you make one of these rolls for a friendly unit/model: advance, charge, damage, hazard, hit, save, wound, or a roll for the number of attacks of a weapon.\nEFFECT: Re-roll that roll. If you rolled several dice together, re-roll one of them (charge rolls are re-rolled in full)."
+  },
+  {
+    "id": "epic-challenge",
+    "name": "EPIC CHALLENGE",
+    "cp": 1,
+    "detachment": null,
+    "turn": "either",
+    "phases": [
+      "fight"
+    ],
+    "when": "Fight phase, just after a friendly CHARACTER unit is selected to fight.",
+    "target": null,
+    "effect": "One CHARACTER model in your unit: its melee weapons have [PRECISION] until end of phase.",
+    "restrictions": null,
+    "text": "EPIC CHALLENGE — 1CP — [Either turn, Fight]\nWHEN: Fight phase, just after a friendly CHARACTER unit is selected to fight.\nEFFECT: One CHARACTER model in your unit: its melee weapons have [PRECISION] until end of phase."
+  },
+  {
+    "id": "insane-bravery",
+    "name": "INSANE BRAVERY",
+    "cp": 1,
+    "detachment": null,
+    "turn": "your",
+    "phases": [
+      "command"
+    ],
+    "when": "Battle-shock step of your Command phase, just before a battle-shock roll for a friendly unit.",
+    "target": null,
+    "effect": "That battle-shock roll automatically succeeds. Once per battle.",
+    "restrictions": null,
+    "text": "INSANE BRAVERY — 1CP — [Your turn, Command]\nWHEN: Battle-shock step of your Command phase, just before a battle-shock roll for a friendly unit.\nEFFECT: That battle-shock roll automatically succeeds. Once per battle."
+  },
+  {
+    "id": "explosives",
+    "name": "EXPLOSIVES",
+    "cp": 1,
+    "detachment": null,
+    "turn": "your",
+    "phases": [
+      "shooting"
+    ],
+    "when": null,
+    "target": "One friendly unengaged EXPLOSIVES/GRENADES unit that is eligible to shoot and did not advance this turn.",
+    "effect": "Pick one EXPLOSIVES/GRENADES model in it and one unengaged enemy unit within 8\" and visible. Roll six D6: each 4+ = 1 mortal wound.",
+    "restrictions": null,
+    "text": "EXPLOSIVES (also called Grenades) — 1CP — [Your turn, Shooting]\nTARGET: One friendly unengaged EXPLOSIVES/GRENADES unit that is eligible to shoot and did not advance this turn.\nEFFECT: Pick one EXPLOSIVES/GRENADES model in it and one unengaged enemy unit within 8\" and visible. Roll six D6: each 4+ = 1 mortal wound."
+  },
+  {
+    "id": "crushing-impact",
+    "name": "CRUSHING IMPACT",
+    "cp": 1,
+    "detachment": null,
+    "turn": "your",
+    "phases": [
+      "charge"
+    ],
+    "when": "Just after a friendly MONSTER/VEHICLE unit ends a charge move.",
+    "target": null,
+    "effect": "Pick one engaged enemy unit and one of your models engaged with it. Roll D6 equal to that model's T: each 1 = 1 mortal wound to YOUR unit; each 5+ = 1 mortal wound to the enemy (max 6).",
+    "restrictions": null,
+    "text": "CRUSHING IMPACT (also called Tank Shock) — 1CP — [Your turn, Charge]\nWHEN: Just after a friendly MONSTER/VEHICLE unit ends a charge move.\nEFFECT: Pick one engaged enemy unit and one of your models engaged with it. Roll D6 equal to that model's T: each 1 = 1 mortal wound to YOUR unit; each 5+ = 1 mortal wound to the enemy (max 6)."
+  },
+  {
+    "id": "rapid-ingress",
+    "name": "RAPID INGRESS",
+    "cp": 1,
+    "detachment": null,
+    "turn": "opponent",
+    "phases": [
+      "movement"
+    ],
+    "when": "End of opponent's Movement phase.",
+    "target": "One unit in strategic reserves (not AIRCRAFT).",
+    "effect": "It makes an ingress move. Not in battle round 1.",
+    "restrictions": null,
+    "text": "RAPID INGRESS — 1CP — [Opponent's turn, Movement]\nWHEN: End of opponent's Movement phase. TARGET: One unit in strategic reserves (not AIRCRAFT).\nEFFECT: It makes an ingress move. Not in battle round 1."
+  },
+  {
+    "id": "fire-overwatch",
+    "name": "FIRE OVERWATCH",
+    "cp": 1,
+    "detachment": null,
+    "turn": "opponent",
+    "phases": [
+      "movement"
+    ],
+    "when": "End of opponent's Movement phase.",
+    "target": "One friendly unengaged unit (not TITANIC).",
+    "effect": "Your unit shoots using snap shooting: one visible eligible enemy unit within 24\"; every attack only hits on an unmodified 6 (not a critical hit), no hit re-rolls.",
+    "restrictions": null,
+    "text": "FIRE OVERWATCH — 1CP — [Opponent's turn, Movement]\nWHEN: End of opponent's Movement phase. TARGET: One friendly unengaged unit (not TITANIC).\nEFFECT: Your unit shoots using snap shooting: one visible eligible enemy unit within 24\"; every attack only hits on an unmodified 6 (not a critical hit), no hit re-rolls."
+  },
+  {
+    "id": "smokescreen",
+    "name": "SMOKESCREEN",
+    "cp": 1,
+    "detachment": null,
+    "turn": "opponent",
+    "phases": [
+      "shooting"
+    ],
+    "when": "Start of opponent's Shooting phase.",
+    "target": "One friendly SMOKE unit.",
+    "effect": "Until end of phase, attacks targeting that unit (or a unit hidden behind it) give the target the benefit of cover.",
+    "restrictions": null,
+    "text": "SMOKESCREEN — 1CP — [Opponent's turn, Shooting]\nWHEN: Start of opponent's Shooting phase. TARGET: One friendly SMOKE unit.\nEFFECT: Until end of phase, attacks targeting that unit (or a unit hidden behind it) give the target the benefit of cover."
+  },
+  {
+    "id": "heroic-intervention",
+    "name": "HEROIC INTERVENTION",
+    "cp": 1,
+    "detachment": null,
+    "turn": "opponent",
+    "phases": [
+      "charge"
+    ],
+    "when": "End of opponent's Charge phase.",
+    "target": "One friendly unengaged unit within 12\" of an enemy (VEHICLE only if CHARACTER/WALKER).",
+    "effect": "Your unit charges. Leap to Defend: can only target enemy units that charged this phase. Into the Fray (+1CP): charge roll max 6, can target any enemy within 6\".",
+    "restrictions": null,
+    "text": "HEROIC INTERVENTION — 1CP (+1CP for \"Into the Fray\") — [Opponent's turn, Charge]\nWHEN: End of opponent's Charge phase. TARGET: One friendly unengaged unit within 12\" of an enemy (VEHICLE only if CHARACTER/WALKER).\nEFFECT: Your unit charges. Leap to Defend: can only target enemy units that charged this phase. Into the Fray (+1CP): charge roll max 6, can target any enemy within 6\"."
+  },
+  {
+    "id": "counteroffensive",
+    "name": "COUNTEROFFENSIVE",
+    "cp": 2,
+    "detachment": null,
+    "turn": "opponent",
+    "phases": [
+      "fight"
+    ],
+    "when": "Fight step of opponent's Fight phase, just after an enemy unit has resolved its attacks.",
+    "target": null,
+    "effect": "One friendly unit eligible to fight gets Fights First until end of phase and must be the next unit you select to fight.",
+    "restrictions": null,
+    "text": "COUNTEROFFENSIVE — 2CP — [Opponent's turn, Fight]\nWHEN: Fight step of opponent's Fight phase, just after an enemy unit has resolved its attacks.\nEFFECT: One friendly unit eligible to fight gets Fights First until end of phase and must be the next unit you select to fight."
+  }
+]
