@@ -1,14 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { primaryFor, dispositionsFor, linesNow, lineVp, cappedVp, totals, newSecondaries, draw, discard, reshuffle } from '../js/scoring.js';
+import { primaryFor, dispositionsFor, linesNow, lineVp, cappedVp, totals, newSecondaries, addCard, discard, putBack } from '../js/scoring.js';
 
 const json = (p) => JSON.parse(readFileSync(new URL(`../${p}`, import.meta.url), 'utf8'));
 const missions = json('data/core/missions.json');
 const orks = { detachments: json('data/orks/detachments.json').detachments };
 const sec = (id) => missions.secondaries.find((s) => s.id === id);
-let seed = 1;
-const rng = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 
 test('every pair of Force Dispositions has exactly one Primary Mission; detachments list theirs', () => {
   for (const a of missions.forceDispositions) for (const b of missions.forceDispositions) assert.ok(primaryFor(missions, a, b), `${a} vs ${b}`);
@@ -52,18 +50,17 @@ test('VP caps: 15 per round, 45 per kind, 20 per Fixed card, UP TO per turn, Bat
   assert.deepEqual(totals([e(), e({ kind: 'secondary' }), { kind: 'ready', vp: 10 }]), { primary: 5, secondary: 5, ready: 10, total: 20 });
 });
 
-test('Tactical deck: shuffled 18 cards, draw 2, discard, reshuffle back', () => {
-  let s = newSecondaries(missions, 'tactical', [], rng);
-  assert.equal(new Set(s.deck).size, 18);
-  s = draw(s, 2, '1-me-command');
-  assert.deepEqual([s.active.length, s.deck.length, s.justDrawn.length, s.drawnAt], [2, 16, 2, '1-me-command']);
-  const [a, b] = s.active;
-  s = discard(s, a);
-  assert.deepEqual([s.active, s.done], [[b], [a]]);
-  s = reshuffle(s, b, rng);
-  assert.deepEqual([s.active.length, s.deck.length, s.deck.includes(b)], [0, 17, true]);
-  const f = newSecondaries(missions, 'fixed', ['assassination', 'bring-it-down']);
-  assert.deepEqual([f.active, f.deck], [['assassination', 'bring-it-down'], []]);
+test('Tactical cards are entered by hand: add, discard, put back; Fixed cards start active', () => {
+  let s = newSecondaries('tactical');
+  assert.deepEqual([s.active, s.done], [[], []]);
+  s = addCard(addCard(s, 'no-prisoners'), 'beacon');
+  assert.deepEqual(addCard(s, 'beacon').active, ['no-prisoners', 'beacon'], 'no duplicates');
+  s = discard(s, 'no-prisoners');
+  assert.deepEqual([s.active, s.done], [['beacon'], ['no-prisoners']]);
+  s = putBack(s, 'beacon');
+  assert.deepEqual([s.active, s.done], [[], ['no-prisoners']], 'put back: not discarded');
+  assert.deepEqual(addCard(s, 'no-prisoners').done, [], 'a discarded card drawn again leaves the discard pile');
+  assert.deepEqual(newSecondaries('fixed', ['assassination', 'bring-it-down']).active, ['assassination', 'bring-it-down']);
 });
 
 test('a condition scores once per turn; "For each" repeats; OR alternatives exclude each other', async () => {

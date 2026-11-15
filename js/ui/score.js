@@ -2,8 +2,7 @@
 // lines that can score at this moment of the game. Logic in js/scoring.js; missions from data/core/missions.json.
 import { h, openSheet } from '../dom.js';
 import { update } from '../store.js';
-import { phaseKey } from '../game.js';
-import { primaryFor, dispositionsFor, linesNow, lineOpen, cappedVp, totals, newSecondaries, draw, discard, reshuffle, CAPS } from '../scoring.js';
+import { primaryFor, dispositionsFor, linesNow, lineOpen, cappedVp, totals, newSecondaries, addCard, discard, putBack, CAPS } from '../scoring.js';
 
 const form = { fd: '', opp: '', mode: 'tactical', fixed: [] };   // setup choices, not persisted
 const editGame = (fn) => update((s) => { fn(s.game); });
@@ -34,7 +33,7 @@ function setup(g, roster, fac, missions, repaint) {
         onclick: () => { form.fixed = form.fixed.includes(c.id) ? form.fixed.filter((x) => x !== c.id) : [...form.fixed, c.id]; repaint(); } }, c.name))) : null,
     h('button', { type: 'button', class: 'btn primary', 'data-k': 'sc-start', disabled: !ready, onclick: () => editGame((x) => {
       x.mission = { fd: form.fd, opp: form.opp, primary: primary.id };
-      x.secondary = newSecondaries(missions, form.mode, form.fixed);
+      x.secondary = newSecondaries(form.mode, form.fixed);
       x.vp ??= { log: [], opp: 0 };
     }) }, 'Start scoring'),
   ];
@@ -43,7 +42,7 @@ function setup(g, roster, fac, missions, repaint) {
 export function scorePane(g, roster, fac, missions, repaint) {
   if (!missions) return [h('p', { class: 'muted' }, 'Loading missions…')];
   if (!g.mission) return setup(g, roster, fac, missions, repaint);
-  const log = g.vp?.log ?? [], t = totals(log), sec = g.secondary, key = phaseKey(g), turn = `${g.round}-${g.turn}`;
+  const log = g.vp?.log ?? [], t = totals(log), sec = g.secondary, turn = `${g.round}-${g.turn}`;
   const card = (id) => missions.secondaries.find((s) => s.id === id);
   const primary = missions.primaries.find((p) => p.id === g.mission.primary);
 
@@ -64,7 +63,8 @@ export function scorePane(g, roster, fac, missions, repaint) {
   const myCommand = g.turn === 'me' && g.phase === 'command', myTurnEnd = g.turn === 'me' && g.phase === 'fight';
   const secCard = (id) => {
     const c = card(id), scored = log.some((e) => e.card === id && e.turn === turn);
-    const redraw = tactical && sec.justDrawn?.includes(id) && sec.drawnAt === key && c.intro.some((l) => /^WHEN DRAWN.*draw one new/i.test(l));
+    // When Drawn rules that discard the card (not "shuffle back": that is Put back)
+    const whenDrawnDiscard = tactical && c.intro.some((l) => /^WHEN DRAWN.*discard this card and draw/i.test(l));
     return h('article', { class: 'card stack' },
       h('button', { type: 'button', class: 'btn link', onclick: () => cardText(c) }, c.name),
       c.intro.filter((l) => /^WHEN DRAWN/.test(l)).map((l) => h('p', { class: 'muted small' }, l)),
@@ -72,12 +72,10 @@ export function scorePane(g, roster, fac, missions, repaint) {
       h('div', { class: 'row' },
         tactical && scored ? h('button', { type: 'button', class: 'btn', onclick: () => editGame((x) => { x.secondary = discard(x.secondary, id); }) }, 'Achieved: discard') : null,
         tactical && myTurnEnd && !scored ? h('button', { type: 'button', class: 'btn', onclick: () => editGame((x) => { x.secondary = discard(x.secondary, id); x.cp++; }) }, 'Discard (+1 CP)') : null,
-        tactical && myCommand && !sec.swapUsed && g.cp >= 1 && sec.deck.length ? h('button', { type: 'button', class: 'btn',
-          onclick: () => editGame((x) => { x.cp--; x.secondary = { ...draw(discard(x.secondary, id), 1), swapUsed: true }; }) }, 'Discard & draw (1 CP, once)') : null,
-        redraw ? h('button', { type: 'button', class: 'btn', onclick: () => editGame((x) => {
-          const back = c.intro.some((l) => /shuffle this card back/i.test(l));
-          x.secondary = draw(back ? reshuffle(x.secondary, id) : discard(x.secondary, id), 1, key);
-        }) }, 'When Drawn: draw a new card') : null));
+        tactical && myCommand && !sec.swapUsed && g.cp >= 1 ? h('button', { type: 'button', class: 'btn',
+          onclick: () => editGame((x) => { x.cp--; x.secondary = { ...discard(x.secondary, id), swapUsed: true }; }) }, 'Discard to draw a new one (1 CP, once)') : null,
+        whenDrawnDiscard ? h('button', { type: 'button', class: 'btn', onclick: () => editGame((x) => { x.secondary = discard(x.secondary, id); }) }, 'When Drawn: discard') : null,
+        tactical ? h('button', { type: 'button', class: 'btn', 'data-k': `sc-back-${id}`, onclick: () => editGame((x) => { x.secondary = putBack(x.secondary, id); }) }, 'Put back in deck') : null));
   };
 
   const oppVp = g.vp.opp ?? 0;
@@ -106,11 +104,13 @@ export function scorePane(g, roster, fac, missions, repaint) {
 
     h('section', { class: 'stack', 'aria-label': 'Secondary Missions' },
       h('h3', null, `${tactical ? 'Tactical' : 'Fixed'} Secondary Missions`),
-      tactical ? h('button', { type: 'button', class: 'btn primary', 'data-k': 'sc-draw', disabled: !myCommand || sec.drawnAt === key || !sec.deck.length,
-        onclick: () => editGame((x) => { x.secondary = draw(x.secondary, 2, key); }) },
-      sec.drawnAt === key ? 'Drawn this Command phase' : myCommand ? 'Draw 2 cards' : 'Draw 2 at the start of your Command phase') : null,
-      sec.active.length ? sec.active.map(secCard) : h('p', { class: 'muted small' }, 'No active Secondary Missions.'),
-      tactical ? h('p', { class: 'muted small' }, `${sec.deck.length} left in the deck · ${sec.done.length} discarded`) : null),
+      tactical ? field(myCommand ? 'Draw 2 from your deck, then add them here' : 'Add a card you drew',
+        h('select', { 'data-k': 'sc-add', onchange: (e) => { const id = e.target.value; if (id) editGame((x) => { x.secondary = addCard(x.secondary, id); }); } },
+          h('option', { value: '' }, 'Pick the card…'),
+          missions.secondaries.filter((c) => !sec.active.includes(c.id))
+            .map((c) => h('option', { value: c.id }, `${c.name}${sec.done.includes(c.id) ? ' (discarded)' : ''}`)))) : null,
+      sec.active.length ? sec.active.map(secCard) : h('p', { class: 'muted small' }, tactical ? 'No cards entered yet.' : 'No active Secondary Missions.'),
+      tactical && sec.done.length ? h('p', { class: 'muted small' }, `Discarded: ${sec.done.map((id) => card(id).name).join(', ')}`) : null),
 
     h('button', { type: 'button', class: 'btn', 'data-k': 'sc-change', onclick: () => {
       if (confirm('Change the mission? Your Secondary cards are reset; VP scored so far is kept.')) editGame((x) => { x.mission = null; x.secondary = null; });

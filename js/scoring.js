@@ -1,5 +1,5 @@
-// Mission scoring (data/core/missions.json): Primary from Force Dispositions, Secondary decks, scoring windows, VP caps.
-// Pure: no DOM or storage; randomness comes in as `rng`. Rules: docs/source/missions-11e.md.
+// Mission scoring (data/core/missions.json): Primary from Force Dispositions, Secondary cards, scoring windows, VP caps.
+// Pure: no DOM or storage. Rules: docs/source/missions-11e.md.
 
 export const CAPS = { perRound: 15, kind: 45, fixedCard: 20, ready: 10 };
 
@@ -85,28 +85,14 @@ export const totals = (log = []) => {
   return { ...t, total: t.primary + t.secondary + t.ready };
 };
 
-// ---------- Secondary decks ----------
+// ---------- Secondary cards (Tactical cards are drawn from your real deck and entered by hand) ----------
 
-export function shuffle(ids, rng = Math.random) {
-  const a = [...ids];
-  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
-  return a;
-}
+/** Fixed: the two picked cards stay active all battle. Tactical: none until you enter the cards you drew. */
+export const newSecondaries = (mode, fixedIds = []) =>
+  ({ mode, active: mode === 'fixed' ? [...fixedIds] : [], done: [], swapUsed: false });
 
-/** Fixed: the two picked cards stay active all battle. Tactical: the whole deck, shuffled. */
-export const newSecondaries = (missions, mode, fixedIds = [], rng = Math.random) => (mode === 'fixed'
-  ? { mode, active: [...fixedIds], deck: [], done: [], drawnAt: null, justDrawn: [], swapUsed: false }
-  : { mode, active: [], deck: shuffle(missions.secondaries.map((s) => s.id), rng), done: [], drawnAt: null, justDrawn: [], swapUsed: false });
-
-/** New state with up to n cards moved from the deck to the active cards. */
-export function draw(sec, n, at) {
-  const cards = sec.deck.slice(0, n);
-  return { ...sec, deck: sec.deck.slice(n), active: [...sec.active, ...cards], drawnAt: at ?? sec.drawnAt, justDrawn: cards };
-}
+/** A card you drew becomes active (once; a discarded card can be drawn again only after it went back into the deck). */
+export const addCard = (sec, id) => (sec.active.includes(id) ? sec : { ...sec, active: [...sec.active, id], done: sec.done.filter((x) => x !== id) });
 export const discard = (sec, id) => ({ ...sec, active: sec.active.filter((x) => x !== id), done: [...sec.done, id] });
-/** "Shuffle this card back into your Secondary Mission deck". */
-export function reshuffle(sec, id, rng = Math.random) {
-  const deck = [...sec.deck], at = Math.floor(rng() * (deck.length + 1));
-  deck.splice(at, 0, id);
-  return { ...sec, active: sec.active.filter((x) => x !== id), deck };
-}
+/** Back into the deck: entered by mistake, or "shuffle this card back into your Secondary Mission deck". */
+export const putBack = (sec, id) => ({ ...sec, active: sec.active.filter((x) => x !== id) });
