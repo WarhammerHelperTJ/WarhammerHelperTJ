@@ -1,5 +1,5 @@
 /* Stratagem pane of the Game view (js/ui/strats.js). Shared components live in app.css. */
-.strat-head { align-items: flex-start; flex-wrap: nowrap; }
+.strat-head { align-items: center; flex-wrap: nowrap; }
 .strat-cp { white-space: nowrap; }
 .strat .rules-text, .ability .rules-text { white-space: pre-wrap; }
 .strat.off { background: var(--bg); border-style: dashed; } /* no opacity: keeps text contrast */

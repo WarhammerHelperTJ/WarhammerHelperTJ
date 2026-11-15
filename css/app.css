@@ -109,3 +109,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .ds-scroll table.stats { width: 100%; }
 table.stats .ds-name { white-space: normal; text-align: left; }
 table.stats tr.ds-kw td { text-align: left; white-space: normal; font-size: 13px; }
+
+/* fold() from dom.js: a tappable summary row with its own open/closed marker (not colour only) */
+details > summary { list-style: none; cursor: pointer; min-height: 48px; display: flex; align-items: center; gap: var(--s2); }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "\25B8"; color: var(--muted); flex-shrink: 0; }
+details[open] > summary::before { content: "\25BE"; }
+details[open] > summary { margin-bottom: var(--s2); }
+details > summary > :first-child { flex: 1; min-width: 0; }

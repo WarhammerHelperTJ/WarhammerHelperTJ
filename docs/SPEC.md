@@ -134,7 +134,7 @@ Dark only (table use), phone first, usable one-handed; on desktop the view is a 
 - Tokens: `--bg #14160f`, `--surface #1f2318`, `--surface-2 #2a2f20`, `--line #3a4130`, `--text #ecefe2`, `--muted #9aa38a`, `--accent #7bc043` (ork green: primary actions, active tab), `--dice #f2c230` (numbers of dice and target numbers), `--crit #e2572b` (crit effects, warnings, mortal wounds), radius 12px, spacing scale 4/8/12/16/24.
 - System font stack. Dice counts and target numbers are 28px bold tabular numerals in `--dice`; body 16px; chips 13px.
 - Every tap target ≥ 48px high. Bottom tab bar (Army, Game, Attack, Strats), fixed, with safe-area padding. Primary actions sit in the lower half of the screen.
-- Components: card, chip (text + muted source), toggle pill, stepper (− n +), bottom sheet for rules text, segmented control.
+- Components: card, chip (text + muted source), toggle pill, stepper (− n +), bottom sheet for rules text, segmented control, fold (`fold()` in dom.js: a `<details>` card that keeps its open state across repaints). In the Game view the turn tracker, ability cards and stratagem rules text are folds, closed by default; a stratagem keeps its name, CP and Use button visible.
 - Attack card: one row per step, left = step name, centre = big "roll N" and "need X+", right/below = chips; an input (stepper) under hit/wound to type the real result in follow-along mode; "Expected" line at the bottom; a Math / Follow-along segmented switch at the top of the screen.
 - Any rule, ability or stratagem name is tappable and opens the full original text in a bottom sheet.
 - Accessibility: real `<button>`/`<input>`/`<label>`, visible focus ring, contrast ≥ 4.5:1, state never by colour alone, `prefers-reduced-motion` respected.

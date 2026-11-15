@@ -1,5 +1,5 @@
 // Game view (source 2.2 + 2.4): turn tracker, then four panes: abilities for this phase | score + units | stratagems.
-import { h, openSheet } from '../dom.js';
+import { h, openSheet, fold } from '../dom.js';
 import { openDatasheet } from './datasheet.js';
 import { get, update, subscribe } from '../store.js';
 import { loadCore, loadFaction, loadMissions, armyRuleById } from '../data.js';
@@ -122,7 +122,11 @@ function running(g, roster, fac) {
   const label = (k, dflt) => cfg.stateLabels?.[k] ?? dflt;
   const active = !!g.waaagh?.activeUntil;
 
-  const header = h('section', { class: 'card stack game-head', 'aria-label': 'Turn tracker' },
+  // collapsed by default so the units get the room; the summary keeps the essentials in view
+  const header = fold('turn', 'card game-head',
+    h('div', { class: 'small' }, h('strong', null, `Round ${g.round}`), ` · ${turnLabel(g)} · ${PHASE_LABEL[g.phase]} · `,
+      h('strong', null, `${g.cp} CP`), active && rule ? ` · ${rule.name}!` : ''),
+    h('div', { class: 'stack' },
     g.name ? h('strong', null, g.name) : null,
     h('div', { class: 'row spread' },
       h('div', null, h('div', { class: 'muted' }, 'Battle round'), h('div', { class: 'big' }, g.round)),
@@ -145,7 +149,7 @@ function running(g, roster, fac) {
         if (g.waaagh?.used) return;
         if (!confirm(`${toggle.label ?? 'Call army rule'}? This is once per battle.`)) return;
         update((s) => { s.game = callArmyRule(s.game, units, rule.name) ?? s.game; });
-      } }, toggle.label ?? rule.name, g.waaagh?.used && !active ? ' (used)' : '') : null);
+      } }, toggle.label ?? rule.name, g.waaagh?.used && !active ? ' (used)' : '') : null));
 
   const unitList = h('section', { class: 'stack', 'aria-labelledby': 'units-h' },
     h('h2', { id: 'units-h' }, 'Units'),
@@ -158,7 +162,7 @@ function running(g, roster, fac) {
   const abilities = [
     h('h2', null, `Abilities: ${PHASE_LABEL[g.phase]} phase`),
     // always-on first; sort is stable, so the rest keeps roster order
-    reminders.length ? reminders.sort((a, b) => b.always - a.always).map((r) => h('article', { class: 'card stack ability' },
+    reminders.length ? reminders.sort((a, b) => b.always - a.always).map((r) => fold(`ab:${r.unitName}:${r.abilityName}`, 'card ability',
       h('div', null, h('h3', null, r.abilityName),
         h('div', { class: 'muted small' }, [r.unitName, r.always ? 'Always on' : 'This phase'].filter(Boolean).join(' · '))),
       h('div', { class: 'rules-text' }, r.text)))

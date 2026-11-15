@@ -35,3 +35,9 @@ export function openSheet(title, text) {
   closeBtn.focus();
   return close;
 }
+
+// Collapsible card: <details> whose open state survives repaints (views rebuild their DOM on every store change).
+const opened = new Set();
+export const fold = (key, cls, summary, ...body) => h('details', { class: cls, open: opened.has(key),
+  ontoggle: (e) => { if (e.target.open) opened.add(key); else opened.delete(key); } },
+  h('summary', { 'data-k': `fold-${key}` }, summary), ...body);

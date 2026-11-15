@@ -1,5 +1,5 @@
 // Stratagem pane of the Game view (source 2.4): usable-now list, use/undo.
-import { h, openSheet } from '../dom.js';
+import { h, openSheet, fold } from '../dom.js';
 import { detachmentById } from '../data.js';
 import { combatUnits, phaseKey } from '../game.js';
 import { availableStratagems, stratagemTargets } from '../engine/stratagems.js';
@@ -28,14 +28,14 @@ export function stratsPane(st, roster, fac, core) {
     const s = a.stratagem;
     const reason = a.usedThisPhase ? 'Used this phase' : !a.affordable ? 'Not enough CP' : a.eligibleUnits.length ? null : 'No eligible unit';
     const field = (label, text) => text ? h('div', null, h('strong', null, `${label}: `), h('span', { class: 'rules-text' }, text)) : null;
+    // name + CP + Use stay visible; the rules text folds away
     return h('article', { class: 'card stack strat' + (a.usable ? '' : ' off') },
-      h('div', { class: 'row spread strat-head' },
-        h('div', null, h('h3', null, s.name),
-          h('div', { class: 'muted small' }, s.detachment ? (detachmentById(fac, s.detachment)?.name ?? s.detachment) : 'Core'),
-          h('div', { class: 'muted small' }, stratWhen(s))),
+      fold(`st:${s.id}`, 'stack', h('div', { class: 'row spread nowrap strat-head' },
+        h('h3', null, s.name),
         h('div', { class: 'strat-cp' }, h('span', { class: 'big' }, s.cp), h('span', { class: 'muted' }, ' CP'))),
+      h('div', { class: 'muted small' }, `${s.detachment ? (detachmentById(fac, s.detachment)?.name ?? s.detachment) : 'Core'} · ${stratWhen(s)}`),
       field('WHEN', s.when), field('TARGET', s.target), field('EFFECT', s.effect), field('RESTRICTIONS', s.restrictions),
-      a.eligibleUnits.length ? h('div', { class: 'small' }, h('strong', null, 'Eligible: '), a.eligibleUnits.map(nameOf).join(', ')) : null,
+      a.eligibleUnits.length ? h('div', { class: 'small' }, h('strong', null, 'Eligible: '), a.eligibleUnits.map(nameOf).join(', ')) : null),
       reason ? h('p', { class: 'reason' }, a.usedThisPhase && g.usedBy?.[s.id] ? `${reason} on ${nameOf(g.usedBy[s.id])}` : reason) : null,
       a.usable ? h('button', { type: 'button', class: 'btn primary', onclick: () => pickAndUse(a) }, `Use (${s.cp} CP)`) : null,
       a.usedThisPhase ? h('button', { type: 'button', class: 'btn', onclick: () => undoStrat(s, key) }, `Undo (refund ${s.cp} CP)`) : null);
