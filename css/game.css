@@ -17,8 +17,11 @@
 .game-unit .pill { font-size: 14px; padding: 0 var(--s3); }
 
 /* primary action stays in the lower half, just above the tab bar */
-.game-next { position: sticky; bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom) + var(--s2)); z-index: 4; }
+.game-next { position: sticky; bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom) + var(--s2)); z-index: 4;
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s2); align-items: center; }
 .game-next .btn { width: 100%; font-size: 18px; min-height: 56px; box-shadow: 0 4px 16px rgba(0,0,0,.5); }
+.game-exit { display: flex; gap: var(--s2); }
+.game-exit .btn { width: auto; font-size: 15px; padding: 0 var(--s3); background: var(--surface); }
 
 .tp-grid { display: flex; flex-direction: column; gap: var(--s2); }
 .tp-num { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); }
@@ -44,7 +47,9 @@
   .game-cols > :is(.pane-units, .pane-score):not(.mid) { display: none; }
   .game-cols > .pane-abilities { grid-column: 1; grid-row: 1 / span 3; }
   .game-cols > .pane-strats { grid-column: 3; grid-row: 1 / span 3; }
-  .game-next { max-width: 448px; margin: 0 auto; }
+  /* close/end at the far left, Next phase centred under the middle column */
+  .game-next { grid-template-columns: minmax(0, 1fr) minmax(0, 448px) minmax(0, 1fr); }
+  .game-next > .game-exit { justify-self: start; }
 }
 
 .score-line { align-items: flex-start; }

@@ -179,11 +179,13 @@ function running(g, roster, fac) {
         h('button', { type: 'button', 'data-k': `mid-${k}`, 'aria-pressed': String(ui.mid === k), onclick: () => { ui.mid = k; ui.pane = k; paint(); } }, text))),
       pane('abilities', abilities),
       pane('score', scorePane(g, roster, fac, missions, paint)),
-      pane('units', unitList, target,
-        h('button', { type: 'button', class: 'btn', onclick: closeGame }, 'Close game (keep it for later)'),
-        h('button', { type: 'button', class: 'btn danger', onclick: endGame }, 'End game')),
+      pane('units', unitList, target),
       pane('strats', stratsPane(get(), roster, fac, core))),
+    // always on screen: leave the game (bottom left) and step the turn
     h('div', { class: 'game-next' },
+      h('div', { class: 'game-exit' },
+        h('button', { type: 'button', class: 'btn', 'data-k': 'close-game', 'aria-label': 'Close game (keep it for later)', title: 'Close game (keep it for later)', onclick: closeGame }, 'Close'),
+        h('button', { type: 'button', class: 'btn danger', 'data-k': 'end-game', 'aria-label': 'End game', title: 'End game (deletes it)', onclick: endGame }, 'End')),
       h('button', { type: 'button', class: 'btn primary', 'data-k': 'next', onclick: () => update((s) => { s.game = nextPhase(s.game); }) },
         g.phase === 'fight' ? (g.turn === 'me' ? "Next phase: opponent's turn" : 'Next phase: your turn') : `Next phase: ${PHASE_LABEL[PHASES[PHASES.indexOf(g.phase) + 1]]}`)),
   ];
