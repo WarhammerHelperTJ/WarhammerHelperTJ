@@ -17,7 +17,7 @@ Product requirements, dice rules and all rules data live in `docs/source/orks-11
 ## Stack
 - Plain HTML + CSS + JavaScript ES modules. **No build step, no runtime dependencies, no framework.** Node 24 is used only for tooling.
 - Tests: `node --test` (built in). Dev server: `tools/serve.mjs` (tiny static server, needed because modules and `fetch` do not run from `file://`).
-- Offline: one cache-first service worker (`sw.js`), added last.
+- Offline: one network-first service worker (`sw.js`): online every load gets the latest files and refreshes the cache; offline the cache answers.
 - State: `localStorage`, every access in try/catch, one key `dicehelper.v1`.
 
 ## Layout
