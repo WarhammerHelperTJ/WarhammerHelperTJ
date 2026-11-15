@@ -22,6 +22,7 @@ It cannot target a unit that was the target of another units charge or attack th
 When mustering your army, unless specifically stated otherwise, you cannot select LEGIONS OF EXCESS as your Army Faction.
 
 ## Mercurial Host (2 DP)
+Force Disposition: Reconnaissance
 ### Detachment Rule: Quicksilver Grace
 You can re-roll Advance rolls made for EMPEROR’S CHILDREN units from your army.
 ### Enhancements
@@ -56,6 +57,7 @@ TARGET: One EMPEROR’S CHILDREN unit from your army that is wholly within 9" of
 EFFECT: Remove your unit from the battlefield and place it into Strategic Reserves.
 
 ## Peerless Bladesmen (2 DP)
+Force Disposition: Priority Assets
 ### Detachment Rule: Exquisite Swordsmanship
 Each time an EMPEROR’S CHILDREN unit from your army is selected to fight, if it made a Charge move this turn, select one of the abilities below. While resolving those attacks, melee weapons equipped by models in that unit have that ability:
 [LETHAL HITS]
@@ -94,6 +96,7 @@ TARGET: One EMPEROR’S CHILDREN unit from your army (you can only select a VEHI
 EFFECT: Your unit can declare a charge. When doing so, you must select that enemy unit as a target of that charge, and your unit does not receive a Charge bonus this turn.
 
 ## Rapid Evisceration (2 DP)
+Force Disposition: Disruption
 ### Detachment Rule: Mechanised Murder
 Each time an EMPEROR’S CHILDREN model from your army makes an attack, if it is a TRANSPORT model or disembarked from a TRANSPORT this turn, re-roll a Hit roll of 1 and re-roll a Wound roll of 1.
 ### Enhancements
@@ -128,6 +131,7 @@ TARGET: One EMPEROR’S CHILDREN TRANSPORT from your army, or up to two EMPEROR�
 EFFECT: For each of those TRANSPORTS wholly within 9" of one or more battlefield edges, remove it from the battlefield and place it into Strategic Reserves.
 
 ## Carnival of Excess (3 DP)
+Force Disposition: Priority Assets; Disruption
 ### Detachment Rule: Daemonic Empowerment
 While an EMPEROR’S CHILDREN unit from your army is within 6" of one or more friendly LEGIONS OF EXCESS units, it is Empowered.
 While a LEGIONS OF EXCESS unit from your army is within 6" of one or more friendly EMPEROR’S CHILDREN units, it is Empowered.
@@ -170,6 +174,7 @@ TARGET: One DAEMONETTES unit from your army that is not within Engagement Range 
 EFFECT: Remove your unit from the battlefield and place it into Strategic Reserves. If it arrives back on the battlefield in the Reinforcements step of your next Movement phase using the Deep Strike ability, it can be set up anywhere that is more than 6" horizontally away from all enemy units (instead of more than 8"), provided it is also set up wholly within 8" of one or more friendly EMPEROR’S CHILDREN units.
 
 ## Coterie of the Conceited (3 DP)
+Force Disposition: Priority Assets; Purge the Foe
 ### Detachment Rule: Pledges to the Dark Prince
 At the start of the battle round, if your WARLORD is on the battlefield, you must pledge a number to Slaanesh representing how many enemy units will be destroyed this battle round. At the end of the battle round, if the number of enemy units destroyed this battle round is greater than or equal to your pledge, you gain a number of Pact points equal to your pledge. Otherwise, you do not gain any Pact points this battle round and your WARLORD model suffers D3 mortal wounds.
 EMPEROR’S CHILDREN units from your army gain a bonus depending on how many Pact points you have gained during the battle, as shown below (these are all cumulative).
@@ -210,6 +215,7 @@ TARGET: One EMPEROR’S CHILDREN unit from your army that was selected as the ta
 EFFECT: Until the attacking unit has finished making its attacks, each time an attack targets a model in your unit, worsen the Armour Penetration characteristic of that attack by 1.
 
 ## Slaanesh’s Chosen (1 DP)
+Force Disposition: Purge the Foe
 ### Detachment Rule: Internal Rivalries
 EMPEROR’S CHILDREN CHARACTER units from your army can ignore any or all modifiers to their Move characteristic and any or all modifiers to Advance and Charge rolls made for them.
 At the start of the battle, your WARLORD’s unit is your army’s Favoured Champions. The first time in each player’s turn that an EMPEROR’S CHILDREN CHARACTER unit from your army destroys an enemy unit, after resolving all of its attacks, that CHARACTER unit becomes your army’s new Favoured Champions, replacing the old one.
@@ -247,6 +253,7 @@ TARGET: That EMPEROR’S CHILDREN CHARACTER unit.
 EFFECT: Your unit can make a surge move of up to D6". If your unit is not your army’s Favoured Champions, you can re-roll the dice to determine the distance of that surge move.
 
 ## Court of the Phoenician (2 DP)
+Force Disposition: Purge the Foe
 ### Detachment Rule: Sensational Performance
 EMPEROR’S CHILDREN units from your army have the following ability:
 Sensational Performance: Each time this unit is selected to fight, if this unit made a Charge move this turn, it can use this ability. If it does, until the end of the phase:
@@ -287,6 +294,7 @@ TARGET: One EMPEROR’S CHILDREN unit from your army that lost one or more wound
 EFFECT: Your unit can make a surge move of up to D6".
 
 ## Elegant Brutes (1 DP)
+Force Disposition: Take and Hold
 ### Detachment Rule: Eager to Kill
 When a friendly EMPEROR’S CHILDREN TERMINATOR unit is set up, that unit has +1 to charge rolls until the end of the turn.
 ### Enhancements
@@ -309,6 +317,7 @@ TARGET: One friendly unengaged EMPEROR’S CHILDREN TERMINATOR unit.
 EFFECT: Place your unit in strategic reserves.
 
 ## Frenzied Host (1 DP)
+Force Disposition: Reconnaissance
 ### Detachment Rule: Frantic Focus
 When a friendly EMPEROR’S CHILDREN BATTLELINE unit is selected to make an advance/fall-back move, that unit’s BATTLELINE models’ attacks have [SUSTAINED HITS 1] until the end of the turn.
 ### Enhancements
@@ -329,6 +338,7 @@ TARGET: That EMPEROR’S CHILDREN BATTLELINE unit.
 EFFECT: Those ranged attacks do not prevent your unit from being hidden.
 
 ## Spectacle of Slaughter (1 DP)
+Force Disposition: Disruption
 ### Detachment Rule: Entitled to Victory
 Friendly FLAWLESS BLADES units have Fights First
 ### Enhancements

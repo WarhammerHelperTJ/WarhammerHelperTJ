@@ -22,6 +22,10 @@ Plain ES modules, no build step, no dependencies. Works offline after the first 
 Any static host. For GitHub Pages, serve the repo root; all paths are relative, so a sub-path like `/repo/` works.
 Offline works after the first visit over https (the service worker is skipped on localhost so development is never stale).
 
+## Score a battle
+
+Game → **Score**: pick both players' Force Dispositions (your options come from your detachments) and Tactical or Fixed Secondaries. The pane then shows the Primary and Secondary lines that can score at this point of the turn (end of your Command phase = your Command phase, end of a turn = its Fight phase), with the VP caps applied. The opponent's VP is a counter you set by hand.
+
 ## Share a roster
 
 Army → open a roster → **Share roster link**. Opening the link on another device adds a copy of the roster there. The roster is inside the part after `#`, which browsers never send to the server.

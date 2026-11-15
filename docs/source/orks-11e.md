@@ -251,6 +251,7 @@ ELIGIBLE IF: Embarked within a TRANSPORT on the battlefield; did not embark with
 WHILE MOVING: Set up each model wholly within the set-up distance of that TRANSPORT.
 
 ## War Horde (3 DP)
+Force Disposition: Take and Hold; Purge the Foe
 ### Detachment Rule: Get Stuck In
 Friendly ORKS units' melee attacks have [Sustained Hits 1].
 ### Enhancements
@@ -288,6 +289,7 @@ TARGET: That ORKS unit.
 EFFECT: Your unit's ranged attacks have [Rapid Fire 1], or if that attack already has [RAPID FIRE], +1 to the value of that [RAPID FIRE].
 
 ## Green Tide (1 DP)
+Force Disposition: Take and Hold
 ### Detachment Rule: Mob-handed Brutality
 • Friendly BOYZ units' melee attacks have [Sustained Hits 1].
 • If a friendly ORKS INFANTRY unit made a charge move this turn, that unit's melee attacks have [Lethal Hits: non-Monster/Vehicle].
@@ -309,6 +311,7 @@ TARGET: That BEAST SNAGGA BOYZ/BOYZ unit.
 EFFECT: Your unit has +2 to advance rolls.
 
 ## Bully Boyz (1 DP)
+Force Disposition: Purge the Foe
 ### Detachment Rule: Displays of Savagery
 Friendly MEGANOBZ/NOBZ units' melee attacks have [Sustained Hits 1].
 ### Enhancements
@@ -331,6 +334,7 @@ EFFECT: Ranged attacks that target your unit with a S greater than your unit's T
 +1CP: Or: Ranged attacks that target your unit have -1 to wound rolls.
 
 ## Runt Swarm (1 DP)
+Force Disposition: Priority Assets
 ### Detachment Rule: Sneaky Little Gitz
 • Friendly GRETCHIN units have BATTLELINE.
 • When a friendly GRETCHIN unit is selected to make an advance/fall-back move, that move does not prevent this unit from being eligible to start an action.
@@ -352,6 +356,7 @@ TARGET: One friendly GRETCHIN unit within 3" of that ORKS INFANTRY unit.
 EFFECT: When a hit roll for that enemy unit's ranged attacks that target that ORKS unit results in a hit, if a model in your GRETCHIN unit is on the battlefield, end the attack sequence for that attack and your GRETCHIN unit suffers 1 mortal wound. (FAQ: [TORRENT] hits are not hit rolls, so they are not stopped.)
 
 ## Shoota Boyz (1 DP)
+Force Disposition: Purge the Foe
 ### Detachment Rule: Dakka! Dakka! Dakka!
 Friendly ORKS INFANTRY units' ranged attacks have [Assault], and while this unit is riled up, +3" range.
 ### Enhancements
@@ -372,6 +377,7 @@ TARGET: That ORKS INFANTRY unit.
 EFFECT: Your unit's ranged attacks have [Sustained Hits 1].
 
 ## Taktikal Brigade (1 DP)
+Force Disposition: Take and Hold
 ### Detachment Rule: Suspiciously Well Organised
 • Friendly STORMBOYZ units have BATTLELINE.
 • When a friendly BOYZ/KOMMANDOS/STORMBOYZ unit is selected to make a fall-back move, that fall-back move does not prevent that unit from being eligible to declare a charge.
@@ -393,6 +399,7 @@ TARGET: One friendly unengaged BOYZ/KOMMANDOS/STORMBOYZ unit that was engaged at
 EFFECT: Your unit can make a normal move of up to 6".
 
 ## Wreckas (1 DP)
+Force Disposition: Priority Assets
 ### Detachment Rule: Wreckin' and Lootin'
 In your Shooting phase, when a friendly BREAKA BOYZ/FLASH GITZ/TANKBUSTAS unit is selected to shoot, if that unit is within range of an objective, or the target of that attack is within range of an objective, that unit's attacks can re-roll hit rolls of 1.
 ### Enhancements
@@ -413,6 +420,7 @@ TARGET: One friendly FLASH GITZ/TANKBUSTAS unit hit by those attacks.
 EFFECT: Your unit shoots using normal shooting, but can only target that enemy unit.
 
 ## Da Big Hunt (1 DP)
+Force Disposition: Purge the Foe
 ### Detachment Rule: Da Hunt is On
 Friendly BEAST SNAGGA units' attacks that target a MONSTER/VEHICLE unit have +1 AP.
 ### Enhancements
@@ -433,6 +441,7 @@ TARGET: One friendly unengaged BEAST SNAGGA unit within 6" of a battlefield edge
 EFFECT: Place your unit in strategic reserves.
 
 ## Madcap Meks (1 DP)
+Force Disposition: Disruption
 ### Detachment Rule: Unpredictable Genius
 In your Shooting phase, when all of a friendly BIG MEK/MEK GUNZ/MORKANAUT/WAZBOM BLASTAJET unit's ranged attacks target a single enemy unit, roll one D6:
 | D6 | Result |
@@ -453,6 +462,7 @@ EFFECT: Your unit's ranged attacks have [Lethal Hits]; or [Sustained Hits 1]; or
 • Enhanced Runt-maw (Upgrade) 10 pts — BIG MEK WITH SHOKK ATTACK GUN model only. When this unit has shot, select one enemy unit hit by those attacks. That unit is infested with Snotlings until the start of your next turn (-1 to its leadership rolls).
 
 ## Dread Mob (1 DP)
+Force Disposition: Purge the Foe
 ### Detachment Rule: Try Dat Button!
 In your Shooting phase or the Fight phase, when a friendly ORKS WALKER unit (excluding TITANIC units) is selected to attack, you can use this ability. If you do, roll either one D6 or two D6 (keep re-rolling duplicate results). This unit's attacks have the relevant rule(s):
 | D6 | Result |
@@ -480,6 +490,7 @@ TARGET: That ORKS WALKER unit.
 EFFECT: Your unit has MOBILE.
 
 ## Blitz Brigade (1 DP)
+Force Disposition: Take and Hold
 ### Detachment Rule: Unstoppable Momentum
 • Friendly WAGON units can re-roll charge rolls.
 • When a friendly WAGON unit is selected to make an advance move, that unit can change advance rolls to a 6.
@@ -501,6 +512,7 @@ TARGET: That WAGON unit.
 EFFECT: Each enemy unit engaged with your unit makes a battle-shock roll, with -1 to that battle-shock roll.
 
 ## Kult of Speed (1 DP)
+Force Disposition: Reconnaissance
 ### Detachment Rule: Adrenaline Junkies
 • Friendly WARBIKERS units have BATTLELINE.
 • When a friendly SPEED FREEKS unit is selected to make an advance/fall-back move, that unit's ranged attacks have [Assault] until the end of the turn, and that move does not prevent that unit from being eligible to declare a charge.
@@ -522,6 +534,7 @@ TARGET: That SPEED FREEKS unit.
 EFFECT: Ranged attacks that target your unit fail on an unmodified hit roll of 1-3.
 
 ## Flyboyz (1 DP)
+Force Disposition: Reconnaissance
 ### Detachment Rule: Skyborne Loons
 • Friendly ORKS AIRCRAFT units do not count towards the combined points value of your strategic reserves units.
 • While a friendly ORKS AIRCRAFT/DEFFKOPTAS unit is riled up, this unit's ranged attacks have +1 to hit rolls.
@@ -543,6 +556,7 @@ TARGET: One friendly unengaged DEFFKOPTAS unit within 8" of that enemy unit.
 EFFECT: Your unit can make a normal move of up to D6", or up to 6" if your unit is riled up.
 
 ## Brute Bosses (1 DP)
+Force Disposition: Purge the Foe
 ### Detachment Rule: 'Ard as Nails
 When a friendly WARBOSS model is destroyed, if this unit has not been selected to fight this phase, roll one D6, with +1 to the roll if your unit is riled up:
 • On a 3+, do not remove this WARBOSS model from the battlefield. When this unit has fought, or at the end of the phase (whichever comes first), this WARBOSS model is removed from the battlefield.
@@ -559,6 +573,7 @@ When a friendly WARBOSS model is destroyed, if this unit has not been selected t
 | Da Gobshot Thunderbuss | 24" | 6 | 4+ | 7 | -2 | 2 | LETHAL HITS: non-MONSTER/VEHICLE, RAPID FIRE 6 |
 
 ## Wurrband (1 DP)
+Force Disposition: Disruption
 ### Detachment Rule: Powers of da Waaagh!
 Friendly ORKS PSYKER models' [Psychic] attacks have +1 S, and +1 S for every 5 models in this unit (or embarked within this model).
 Friendly ORKS PSYKER models have the following psychic abilities:

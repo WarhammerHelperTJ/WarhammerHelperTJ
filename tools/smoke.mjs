@@ -99,6 +99,19 @@ try {
     await evaluate(START(rid, 'command'));
     await visit(`${name} · Army`, '#/army');
     await visit(`${name} · Game`, '#/game');
+    await visit(`${name} · Game score setup`, '#/game', `document.querySelector('[data-k="pane-score"]')?.click()`);
+    await visit(`${name} · Game scoring started`, '#/game', `document.querySelector('[data-k="sc-start"]')?.click()`);
+    // every round, both turns, Command and Fight (the scoring windows), incl. drawing Tactical cards
+    for (const round of [1, 2, 5]) for (const turn of ['me', 'opp']) for (const phase of ['command', 'fight']) {
+      await visit(`${name} · Score round ${round} ${turn} ${phase}`, '#/game', `(async () => {
+        const S = await import('/js/store.js');
+        S.update((s) => { Object.assign(s.game, { round: ${round}, turn: '${turn}', phase: '${phase}' }); });
+        await new Promise((r) => setTimeout(r, 300));
+        document.querySelector('[data-k="sc-draw"]:not([disabled])')?.click();
+        await new Promise((r) => setTimeout(r, 300));
+        document.querySelector('.score-line:not([disabled])')?.click();
+      })()`);
+    }
     for (const phase of ['command', 'movement', 'shooting', 'charge', 'fight']) {
       await evaluate(START(rid, phase));
       await visit(`${name} · Attack (${phase})`, '#/attack');

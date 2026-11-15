@@ -16,6 +16,9 @@
       "id": "mercurial-host",
       "name": "Mercurial Host",
       "dp": 2,
+      "forceDispositions": [
+        "Reconnaissance"
+      ],
       "rule": {
         "name": "Quicksilver Grace",
         "text": "You can re-roll Advance rolls made for EMPEROR’S CHILDREN units from your army."
@@ -155,6 +158,9 @@
       "id": "peerless-bladesmen",
       "name": "Peerless Bladesmen",
       "dp": 2,
+      "forceDispositions": [
+        "Priority Assets"
+      ],
       "rule": {
         "name": "Exquisite Swordsmanship",
         "text": "Each time an EMPEROR’S CHILDREN unit from your army is selected to fight, if it made a Charge move this turn, select one of the abilities below. While resolving those attacks, melee weapons equipped by models in that unit have that ability:\n[LETHAL HITS]\n[SUSTAINED HITS 1]"
@@ -294,6 +300,9 @@
       "id": "rapid-evisceration",
       "name": "Rapid Evisceration",
       "dp": 2,
+      "forceDispositions": [
+        "Disruption"
+      ],
       "rule": {
         "name": "Mechanised Murder",
         "text": "Each time an EMPEROR’S CHILDREN model from your army makes an attack, if it is a TRANSPORT model or disembarked from a TRANSPORT this turn, re-roll a Hit roll of 1 and re-roll a Wound roll of 1."
@@ -433,6 +442,10 @@
       "id": "carnival-of-excess",
       "name": "Carnival of Excess",
       "dp": 3,
+      "forceDispositions": [
+        "Priority Assets",
+        "Disruption"
+      ],
       "rule": {
         "name": "Daemonic Empowerment",
         "text": "While an EMPEROR’S CHILDREN unit from your army is within 6\" of one or more friendly LEGIONS OF EXCESS units, it is Empowered.\nWhile a LEGIONS OF EXCESS unit from your army is within 6\" of one or more friendly EMPEROR’S CHILDREN units, it is Empowered.\nWhile a unit from your army is Empowered, weapons equipped by models in that unit have the [sustained hits 1] ability. If such a weapon already has that ability, each time an attack is made with that weapon, an unmodified Hit roll of 5+ scores a Critical Hit.\nLEGIONS OF EXCESS\nYou can include LEGIONS OF EXCESS units in your army, even though they do not have the EMPEROR’S CHILDREN Faction keyword. The combined points cost of such units you can include in your army is:\nIncursion: Up to 500 pts\nStrike Force: Up to 1000 pts\nOnslaught: Up to 1500 pts\nNo LEGIONS OF EXCESS models from your army can be your WARLORD."
@@ -572,6 +585,10 @@
       "id": "coterie-of-the-conceited",
       "name": "Coterie of the Conceited",
       "dp": 3,
+      "forceDispositions": [
+        "Priority Assets",
+        "Purge the Foe"
+      ],
       "rule": {
         "name": "Pledges to the Dark Prince",
         "text": "At the start of the battle round, if your WARLORD is on the battlefield, you must pledge a number to Slaanesh representing how many enemy units will be destroyed this battle round. At the end of the battle round, if the number of enemy units destroyed this battle round is greater than or equal to your pledge, you gain a number of Pact points equal to your pledge. Otherwise, you do not gain any Pact points this battle round and your WARLORD model suffers D3 mortal wounds.\nEMPEROR’S CHILDREN units from your army gain a bonus depending on how many Pact points you have gained during the battle, as shown below (these are all cumulative).\n1+ Pact points: Each time a model in this unit makes an attack, re-roll a Hit roll of 1.\n3+ Pact points: Each time a model in this unit makes an attack, re-roll a Wound roll of 1.\n5+ Pact points: Melee weapons equipped by models in this unit have the [LETHAL HITS] and [SUSTAINED HITS 1] abilities.\n7+ Pact points: Each time a model in this unit makes an attack, a Critical Hit is scored on an unmodified Hit roll of 5+."
@@ -713,6 +730,9 @@
       "id": "slaaneshs-chosen",
       "name": "Slaanesh’s Chosen",
       "dp": 1,
+      "forceDispositions": [
+        "Purge the Foe"
+      ],
       "rule": {
         "name": "Internal Rivalries",
         "text": "EMPEROR’S CHILDREN CHARACTER units from your army can ignore any or all modifiers to their Move characteristic and any or all modifiers to Advance and Charge rolls made for them.\nAt the start of the battle, your WARLORD’s unit is your army’s Favoured Champions. The first time in each player’s turn that an EMPEROR’S CHILDREN CHARACTER unit from your army destroys an enemy unit, after resolving all of its attacks, that CHARACTER unit becomes your army’s new Favoured Champions, replacing the old one.\nEach time a model in your army’s Favoured Champions unit makes an attack, you can re-roll the Wound roll."
@@ -854,6 +874,9 @@
       "id": "court-of-the-phoenician",
       "name": "Court of the Phoenician",
       "dp": 2,
+      "forceDispositions": [
+        "Purge the Foe"
+      ],
       "rule": {
         "name": "Sensational Performance",
         "text": "EMPEROR’S CHILDREN units from your army have the following ability:\nSensational Performance: Each time this unit is selected to fight, if this unit made a Charge move this turn, it can use this ability. If it does, until the end of the phase:\nThis unit cannot target a unit it was within Engagement Range of at the start of the turn.\nThis unit cannot target a unit that was the target of another unit’s attack this phase.\nImprove the Strength and Armour Penetration characteristics of this unit’s melee weapons by 1.\nMaster of the Pageant:\nOnce per battle round, when you target a FULGRIM unit from your army with the Sinuous Breach or Prideful Superiority Stratagem, you can reduce the CP cost of that use of that Stratagem by 1CP."
@@ -995,6 +1018,9 @@
       "id": "elegant-brutes",
       "name": "Elegant Brutes",
       "dp": 1,
+      "forceDispositions": [
+        "Take and Hold"
+      ],
       "rule": {
         "name": "Eager to Kill",
         "text": "When a friendly EMPEROR’S CHILDREN TERMINATOR unit is set up, that unit has +1 to charge rolls until the end of the turn."
@@ -1073,6 +1099,9 @@
       "id": "frenzied-host",
       "name": "Frenzied Host",
       "dp": 1,
+      "forceDispositions": [
+        "Reconnaissance"
+      ],
       "rule": {
         "name": "Frantic Focus",
         "text": "When a friendly EMPEROR’S CHILDREN BATTLELINE unit is selected to make an advance/fall-back move, that unit’s BATTLELINE models’ attacks have [SUSTAINED HITS 1] until the end of the turn."
@@ -1150,6 +1179,9 @@
       "id": "spectacle-of-slaughter",
       "name": "Spectacle of Slaughter",
       "dp": 1,
+      "forceDispositions": [
+        "Disruption"
+      ],
       "rule": {
         "name": "Entitled to Victory",
         "text": "Friendly FLAWLESS BLADES units have Fights First"

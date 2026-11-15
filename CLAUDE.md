@@ -10,7 +10,7 @@ Static phone-first web app. Plain HTML/CSS/JS ES modules, no build step, no depe
 
 ## Rules
 - Do not add npm packages or a bundler.
-- `data/*/datasheets.json`, `data/*/detachments.json`, `data/core/*.json` are generated: change `tools/build-data.mjs`, never the JSON. `data/orks/effects.json` is hand-written.
+- `data/*/datasheets.json`, `data/*/detachments.json`, `data/core/*.json` (incl. `missions.json`) are generated: change `tools/build-data.mjs`, never the JSON. `data/orks/effects.json` is hand-written.
 - `js/engine/**` is pure: no DOM, no `localStorage`, no `fetch`. Tests import it directly in Node.
 - Code stays faction-agnostic: no unit, detachment or stratagem name in `js/`. Ork specifics live in `data/orks/`.
 - Rules text shown to the user is the verbatim source text; never paraphrase it in data.
@@ -22,4 +22,5 @@ Static phone-first web app. Plain HTML/CSS/JS ES modules, no build step, no depe
 - `docs/SPEC.md` — tech spec, data model, engine contract, design
 - `docs/PLAN.md` — tasks and status
 - `docs/source/orks-11e.md` — product spec (sections 1–4) and all rules data (Parts A–C); the authority on rules
+- `docs/source/missions-11e.md` — Primary/Secondary Mission cards and how scoring works
 - `filemap.md` — where things live

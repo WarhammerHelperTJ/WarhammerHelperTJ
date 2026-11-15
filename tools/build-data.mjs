@@ -10,6 +10,66 @@ const FACTIONS = [
   { id: 'emperors-children', file: 'emperors-children-11e.md', keyword: null },
 ];
 let L, used, issues, FACTION_KW;
+const FORCE_DISPOSITIONS = ['Take and Hold', 'Disruption', 'Purge the Foe', 'Priority Assets', 'Reconnaissance'];
+
+// ---------- missions (docs/source/missions-11e.md) -> data/core/missions.json ----------
+const ROUNDS = {
+  'ANY BATTLE ROUND': [1, 5], 'FIRST BATTLE ROUND': [1, 1], 'FIRST AND SECOND BATTLE ROUND': [1, 2],
+  'SECOND BATTLE ROUND ONWARDS': [2, 5], 'SECOND TO FOURTH BATTLE ROUND': [2, 4], 'SECOND AND THIRD BATTLE ROUND': [2, 3],
+  'FOURTH BATTLE ROUND ONWARDS': [4, 5], 'FIFTH BATTLE ROUND': [5, 5], 'END OF THE BATTLE': null,
+};
+// timing = when a line can score; round5 = its timing in the fifth battle round
+const TIMINGS = {
+  'End of your turn.': { timing: 'yourTurnEnd' },
+  'End of your Command phase.': { timing: 'yourCommand' },
+  'End of your Command phase (or the end of your turn in the fifth battle round).': { timing: 'yourCommand', round5: 'yourTurnEnd' },
+  'End of a turn.': { timing: 'anyTurnEnd' },
+  'End of your opponent’s turn.': { timing: 'oppTurnEnd' },
+  // in round 5 the opponent's turn ends before or with the round, so this is always the end of their turn
+  'End of your opponent’s turn or the end of the fifth battle round (whichever comes first).': { timing: 'oppTurnEnd' },
+};
+function missionCards() {
+  const M = readFileSync(new URL('docs/source/missions-11e.md', ROOT), 'utf8').split(/\r?\n/);
+  const start = M.findIndex(s => s.startsWith('# PART M'));
+  if (start < 0) throw new Error('missions-11e.md: PART M not found');
+  const primaries = [], secondaries = [], bad = [];
+  let card = null, block = null, when = null;
+  for (const s of M.slice(start + 1)) {
+    let m;
+    if (!s.trim()) continue;
+    if ((m = /^## PRIMARY: (.+) — (.+) vs (.+)$/.exec(s))) {
+      primaries.push(card = { id: kebab(m[1]), name: m[1], forceDisposition: m[2], opponent: m[3], intro: [], blocks: [], text: s.slice(3) });
+      block = null;
+    } else if ((m = /^## SECONDARY: (.+?)( \(Fixed\))?$/.exec(s))) {
+      secondaries.push(card = { id: kebab(m[1]), name: m[1], fixed: !!m[2], intro: [], blocks: [], text: s.slice(3) });
+      block = null;
+    } else if (!card) bad.push(s);
+    else {
+      card.text += `\n${s}`;
+      if ((m = /^### (.+)$/.exec(s))) {
+        if (!(m[1] in ROUNDS)) bad.push(s);
+        card.blocks.push(block = { header: m[1], rounds: ROUNDS[m[1]], endOfBattle: ROUNDS[m[1]] === null, lines: [] });
+        when = null;
+      } else if ((m = /^WHEN: (.+)$/.exec(s))) {
+        if (!TIMINGS[m[1]]) bad.push(s);
+        when = { when: m[1], ...TIMINGS[m[1]] };
+      } else if ((m = /^• (OR )?(.+?) — (.+)$/.exec(s)) && block) {
+        const vp = m[2];
+        const num = (re) => { const x = re.exec(vp); return x ? +x[1] : null; };
+        const line = { ...(when ?? {}), or: !!m[1], cumulative: /CUMULATIVE/.test(vp), vp: num(/^\+?(\d+)VP/),
+          fixed: num(/(\d+)VP FIXED/), tactical: num(/(\d+)VP TACTICAL/), upTo: num(/UP TO (\d+)VP/), label: vp, text: m[3] };
+        if (line.vp == null) bad.push(s);
+        block.lines.push(line);
+      } else card.intro.push(s);   // WHEN DRAWN, actions, notes, card-wide rules
+    }
+  }
+  if (primaries.length !== 25) bad.push(`expected 25 primaries, got ${primaries.length}`);
+  for (const a of FORCE_DISPOSITIONS) for (const b of FORCE_DISPOSITIONS) {
+    if (primaries.filter(p => p.forceDisposition === a && p.opponent === b).length !== 1) bad.push(`no single primary for ${a} vs ${b}`);
+  }
+  if (bad.length) throw new Error(`missions-11e.md:\n  ${bad.join('\n  ')}`);
+  return { forceDispositions: FORCE_DISPOSITIONS, primaries, secondaries };
+}
 
 const kebab = s => s.toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const find = (pred, from = 0) => L.findIndex((s, i) => i >= from && pred(s));
@@ -129,12 +189,15 @@ function partB() {
     used.add(j);
     if (s === '## Army Rules') mode = 'army';
     else if ((m = /^## (.+) \((\d+) DP\)$/.exec(s))) {
-      det = { id: kebab(m[1]), name: m[1], dp: +m[2], rule: null, enhancements: [], stratagems: [] };
+      det = { id: kebab(m[1]), name: m[1], dp: +m[2], forceDispositions: [], rule: null, enhancements: [], stratagems: [] };
       detachments.push(det);
       mode = 'det'; cur = null;
     } else if (mode === 'army' && s.startsWith('### ')) {
       const name = s.slice(4);
       armyRules.push(cur = { id: kebab(name), name, text: '' });
+    } else if (det && mode === 'det' && (m = /^Force Disposition: (.+)$/.exec(s))) {
+      det.forceDispositions = m[1].split(';').map(x => x.trim());
+      for (const fd of det.forceDispositions) if (!FORCE_DISPOSITIONS.includes(fd)) issues.notes.push(`${det.name}: unknown Force Disposition ${fd}`);
     } else if (det && (m = /^### Detachment Rule: (.+)$/.exec(s))) {
       det.rule = cur = { name: m[1], text: '' };
       mode = 'rule';
@@ -311,6 +374,10 @@ const write = (path, data) => {
   writeFileSync(url, `${JSON.stringify(data, null, 2)}\n`);
 };
 const show = (label, xs) => { console.log(`${label}: ${xs.length}`); for (const x of xs) console.log(`  ${x}`); };
+
+const missions = missionCards();
+write('data/core/missions.json', missions);
+console.log(`== missions: ${missions.primaries.length} primaries, ${missions.secondaries.length} secondaries (${missions.secondaries.filter(s => s.fixed).length} fixed)`);
 
 let core = [];
 for (const f of [...FACTIONS].sort((a, b) => !!b.core - !!a.core)) { // core file first: its stratagem ids are checked against every faction

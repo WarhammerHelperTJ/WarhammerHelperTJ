@@ -32,14 +32,19 @@
 @media (max-width: 999px) { .game-cols > .pane:not(.on) { display: none; } }
 @media (min-width: 1000px) {
   #view:has(.game-cols) { max-width: 1440px; }
-  .game-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto minmax(0, 1fr);
+  .game-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto auto minmax(0, 1fr);
     /* fills the screen above the Next button and tab bar, so each pane scrolls on its own */
     height: calc(100dvh - var(--tabbar-h) - env(safe-area-inset-bottom) - 56px - 4 * var(--s4)); min-height: 320px; }
   .game-cols > .pane { overflow-y: auto; min-height: 0; padding-right: var(--s2); }
   .game-cols > .pane > * { flex-shrink: 0; }
   .game-cols > .seg { display: none; }
-  .game-cols > .game-head, .game-cols > .pane-units { grid-column: 2; }
-  .game-cols > .pane-abilities { grid-column: 1; grid-row: 1 / span 2; }
-  .game-cols > .pane-strats { grid-column: 3; grid-row: 1 / span 2; }
+  .game-cols > .game-head, .game-cols > .pane-units, .game-cols > .pane-score { grid-column: 2; }
+  .game-cols > .pane-score { grid-row: 2; max-height: 42dvh; }   /* score on top of units, each scrolls */
+  .game-cols > .pane-units { grid-row: 3; }
+  .game-cols > .pane-abilities { grid-column: 1; grid-row: 1 / span 3; }
+  .game-cols > .pane-strats { grid-column: 3; grid-row: 1 / span 3; }
   .game-next { max-width: 448px; margin: 0 auto; }
 }
+
+.score-line { align-items: flex-start; }
+.score-line > strong { white-space: nowrap; color: var(--dice); }

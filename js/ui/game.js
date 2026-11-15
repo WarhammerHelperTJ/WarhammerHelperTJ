@@ -1,14 +1,15 @@
-// Game view (source 2.2 + 2.4): turn tracker, then three panes: abilities for this phase | units | stratagems.
+// Game view (source 2.2 + 2.4): turn tracker, then four panes: abilities for this phase | score + units | stratagems.
 import { h, openSheet } from '../dom.js';
 import { openDatasheet } from './datasheet.js';
 import { get, update, subscribe } from '../store.js';
-import { loadCore, loadFaction, armyRuleById } from '../data.js';
+import { loadCore, loadFaction, loadMissions, armyRuleById } from '../data.js';
 import { PHASES, newGame, nextPhase, callArmyRule, combatUnits, unitStart, warlordRules } from '../game.js';
 import { renderTargetPanel } from './target.js';
 import { phaseReminders } from '../engine/stratagems.js';
 import { stratsPane } from './strats.js';
+import { scorePane } from './score.js';
 
-let root, unsub, core;
+let root, unsub, core, missions;
 const loaded = new Map();                 // faction id -> faction data
 const ui = { rosterId: null, first: 'me', name: '', pane: 'units' }; // start-screen choices, not persisted
 
@@ -34,7 +35,7 @@ export async function render(r) {
   unsub = subscribe(schedule);
   root.append(h('p', { class: 'muted' }, 'Loading…'));
   try {
-    core = await loadCore();
+    [core, missions] = await Promise.all([loadCore(), loadMissions()]);
     await Promise.all([...new Set(get().rosters.map((x) => x.faction))].map((id) => loadFaction(id).then((f) => loaded.set(id, f))));
   } catch (e) {
     root.replaceChildren(h('p', { class: 'crit' }, `Could not load data: ${e.message}`));
@@ -163,7 +164,7 @@ function running(g, roster, fac) {
       h('div', { class: 'rules-text' }, r.text)))
       : h('p', { class: 'muted' }, 'No abilities for this phase.'),
   ];
-  const PANES = [['abilities', 'Abilities'], ['units', 'Units'], ['strats', 'Strats']];
+  const PANES = [['abilities', 'Abilities'], ['score', 'Score'], ['units', 'Units'], ['strats', 'Strats']];
   const pane = (k, ...kids) => h('section', { class: `stack pane pane-${k}${ui.pane === k ? ' on' : ''}`, 'aria-label': PANES.find((p) => p[0] === k)[1] }, kids);
 
   return [
@@ -173,6 +174,7 @@ function running(g, roster, fac) {
       h('div', { class: 'seg', role: 'group', 'aria-label': 'Show' }, PANES.map(([k, text]) =>
         h('button', { type: 'button', 'data-k': `pane-${k}`, 'aria-pressed': String(ui.pane === k), onclick: () => { ui.pane = k; paint(); } }, text))),
       pane('abilities', abilities),
+      pane('score', scorePane(g, roster, fac, missions, paint)),
       pane('units', unitList, target,
         h('button', { type: 'button', class: 'btn', onclick: closeGame }, 'Close game (keep it for later)'),
         h('button', { type: 'button', class: 'btn danger', onclick: endGame }, 'End game')),

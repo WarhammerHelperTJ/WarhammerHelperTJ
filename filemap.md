@@ -17,13 +17,18 @@
 - `js/share.js` — roster ⇄ link code (`encodeRoster`/`decodeRoster`: JSON, deflate, base64url, validated); `#/import/<code>` is handled in `js/main.js`
 - `tests/share.test.mjs` — roster link round trip and rejection of damaged/tampered links
 - `css/army.css` — army builder view styles (also `.field`, `.btn.link`, `.btn.danger`, `.spread`, `.small` used by other views)
-- `css/game.css` — game view (three panes: abilities | units | strats) + target panel styles
+- `css/game.css` — game view (panes: abilities | score + units | strats) + target panel styles
 - `css/strats.css` — stratagem pane styles
 - `css/attack.css` — attack view styles (dice card rows, tappable chips, follow-along steppers)
 - `js/attack-setup.js` — pure Attack-view selection: `weaponChoices` (per model group: one melee + Extra Attacks, close-quarters either/or, profiles, models attacking), `buildGroups` → `computeAttack` groups, `effectsWithBearers`
 - `js/ui/attack.js` — Attack view: unit, Shoot/Fight, weapons, target, stratagems/manual effects, context toggles, dice cards (Math / Follow-along), after attacking
 - `js/ui/strat-actions.js` — shared stratagem `useStrat` / `undoStrat` (CP, once per phase, `game.usedBy`) and `stratWhen` label; used by Strats and Attack
 - `tests/attack-setup.test.mjs` — `js/attack-setup.js` tests incl. the SPEC definition-of-done Power Klaw card end to end
+- `js/scoring.js` — pure mission scoring: `primaryFor`, `dispositionsFor`, `linesNow` (scoring windows), `lineOpen`, `cappedVp` (VP caps), `totals`, Secondary deck `newSecondaries`/`draw`/`discard`/`reshuffle`
+- `js/ui/score.js` — `scorePane()`: Score pane of the Game view (mission setup, VP totals, lines scoring now, Tactical/Fixed cards)
+- `docs/source/missions-11e.md` — Chapter Approved 2026-27 Primary and Secondary Mission cards (source of truth for scoring)
+- `data/core/missions.json` — generated from `missions-11e.md` (`npm run data`)
+- `tests/scoring.test.mjs` — `js/scoring.js` on the real mission data
 - `js/game.js` — pure game helpers: `PHASES`, `combatUnits` (bodyguard + attached characters as one unit), `unitStart`, `newGame`, `phaseKey`, `nextPhase`, `callArmyRule`
 - `js/ui/target.js` — `renderTargetPanel(container)`: opponent target form, faction + unit + leader/support picker (`targetFromDatasheet`), presets (used by Game and Attack)
 - `data/orks/game.json` — hand-written game-view config: army-wide toggle (`armyToggle`), Warlord rules, state labels, `abilityPhases` (ability name → phases it is listed in on the Game view; `[]` = never)

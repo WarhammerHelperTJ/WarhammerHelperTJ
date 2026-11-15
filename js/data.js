@@ -33,6 +33,8 @@ export async function loadFaction(id) {
   return { id, datasheets, armyRules, detachments, effects, game };
 }
 
+/** -> { forceDispositions, primaries, secondaries } (data/core/missions.json, docs/source/missions-11e.md). */
+export const loadMissions = () => getJSON('data/core/missions.json');
 /** -> [{ id, name }] factions that have data (data/factions.json). */
 export const loadFactions = () => getJSON('data/factions.json');
 /** -> example roster template of a faction (data/<id>/example-roster.json); rejects if none. */
