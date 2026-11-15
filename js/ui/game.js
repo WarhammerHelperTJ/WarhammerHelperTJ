@@ -11,7 +11,7 @@ import { scorePane } from './score.js';
 
 let root, unsub, core, missions;
 const loaded = new Map();                 // faction id -> faction data
-const ui = { rosterId: null, first: 'me', name: '', pane: 'units' }; // start-screen choices, not persisted
+const ui = { rosterId: null, first: 'me', name: '', pane: 'units', mid: 'units' }; // view choices, not persisted; mid = middle column on wide screens
 
 // Same guard as the army view: a blur commit must not rebuild the DOM under a pressed pointer.
 let down = false, pending = false;
@@ -165,14 +165,18 @@ function running(g, roster, fac) {
       : h('p', { class: 'muted' }, 'No abilities for this phase.'),
   ];
   const PANES = [['abilities', 'Abilities'], ['score', 'Score'], ['units', 'Units'], ['strats', 'Strats']];
-  const pane = (k, ...kids) => h('section', { class: `stack pane pane-${k}${ui.pane === k ? ' on' : ''}`, 'aria-label': PANES.find((p) => p[0] === k)[1] }, kids);
+  const pane = (k, ...kids) => h('section', { class: `stack pane pane-${k}${ui.pane === k ? ' on' : ''}${ui.mid === k ? ' mid' : ''}`, 'aria-label': PANES.find((p) => p[0] === k)[1] }, kids);
 
   return [
     // phone: one pane at a time, picked with the switch; wide screens: all three side by side (game.css)
     h('div', { class: 'game-cols' },
       header,
-      h('div', { class: 'seg', role: 'group', 'aria-label': 'Show' }, PANES.map(([k, text]) =>
-        h('button', { type: 'button', 'data-k': `pane-${k}`, 'aria-pressed': String(ui.pane === k), onclick: () => { ui.pane = k; paint(); } }, text))),
+      // phone: pick one of the four panes; wide: abilities and strats are always shown, the middle column is units or score
+      h('div', { class: 'seg pane-switch', role: 'group', 'aria-label': 'Show' }, PANES.map(([k, text]) =>
+        h('button', { type: 'button', 'data-k': `pane-${k}`, 'aria-pressed': String(ui.pane === k),
+          onclick: () => { ui.pane = k; if (k === 'units' || k === 'score') ui.mid = k; paint(); } }, text))),
+      h('div', { class: 'seg mid-switch', role: 'group', 'aria-label': 'Middle column' }, [['units', 'Units'], ['score', 'Score']].map(([k, text]) =>
+        h('button', { type: 'button', 'data-k': `mid-${k}`, 'aria-pressed': String(ui.mid === k), onclick: () => { ui.mid = k; ui.pane = k; paint(); } }, text))),
       pane('abilities', abilities),
       pane('score', scorePane(g, roster, fac, missions, paint)),
       pane('units', unitList, target,

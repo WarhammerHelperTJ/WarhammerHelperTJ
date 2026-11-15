@@ -27,9 +27,9 @@
 
 .btn.passive { display: block; text-align: left; white-space: normal; }
 
-/* Three panes. Phone: header, switch, one pane. Wide: abilities | header + units | strats. */
+/* Four panes. Phone: header, switch, one pane. Wide: abilities | header + (units or score) | strats. */
 .game-cols { display: flex; flex-direction: column; gap: var(--s4); }
-@media (max-width: 999px) { .game-cols > .pane:not(.on) { display: none; } }
+@media (max-width: 999px) { .game-cols > .pane:not(.on), .game-cols > .mid-switch { display: none; } }
 @media (min-width: 1000px) {
   #view:has(.game-cols) { max-width: 1440px; }
   .game-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto auto minmax(0, 1fr);
@@ -37,10 +37,11 @@
     height: calc(100dvh - var(--tabbar-h) - env(safe-area-inset-bottom) - 56px - 4 * var(--s4)); min-height: 320px; }
   .game-cols > .pane { overflow-y: auto; min-height: 0; padding-right: var(--s2); }
   .game-cols > .pane > * { flex-shrink: 0; }
-  .game-cols > .seg { display: none; }
-  .game-cols > .game-head, .game-cols > .pane-units, .game-cols > .pane-score { grid-column: 2; }
-  .game-cols > .pane-score { grid-row: 2; max-height: 42dvh; }   /* score on top of units, each scrolls */
-  .game-cols > .pane-units { grid-row: 3; }
+  .game-cols > .pane-switch { display: none; }
+  .game-cols > .game-head, .game-cols > .mid-switch, .game-cols > .pane-units, .game-cols > .pane-score { grid-column: 2; }
+  .game-cols > .mid-switch { grid-row: 2; }
+  .game-cols > .pane-units, .game-cols > .pane-score { grid-row: 3; }
+  .game-cols > :is(.pane-units, .pane-score):not(.mid) { display: none; }
   .game-cols > .pane-abilities { grid-column: 1; grid-row: 1 / span 3; }
   .game-cols > .pane-strats { grid-column: 3; grid-row: 1 / span 3; }
   .game-next { max-width: 448px; margin: 0 auto; }
