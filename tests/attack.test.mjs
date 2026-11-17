@@ -345,3 +345,14 @@ test('summarize: two cards carry a wounded model over; kills never exceed the un
   assert.ok(s.kills <= 2 + 1e-9 && s.kills > Math.max(two[0].expected.kills, two[1].expected.kills));
   close(s.unsaved, two[0].expected.unsaved + two[1].expected.unsaved);
 });
+
+test('"Other abilities" modifiers set by hand: -1 hit, -1 AP (worse, never above 0), +1 AP (better)', () => {
+  const adj = (mods) => eff('Other abilities', mods);
+  const c = card(gun({ AP: -1 }), { Sv: 3 }, { effects: [adj({ hit: -1, ap: -1 })] });
+  assert.equal(c.hit.need, 5);
+  assert.equal(c.save.need, 3);                                   // AP -1 worsened to 0
+  assert.equal(card(gun(), { Sv: 3 }, { effects: [adj({ ap: -1 })] }).save.need, 3);   // AP 0 stays 0
+  assert.equal(card(gun(), { Sv: 3 }, { effects: [adj({ ap: 1 })] }).save.need, 4);
+  // still capped with the unit's own +1: they cancel
+  assert.equal(card(gun(), {}, { effects: [eff('Buff', { hit: 1 }), adj({ hit: -1 })] }).hit.need, 4);
+});

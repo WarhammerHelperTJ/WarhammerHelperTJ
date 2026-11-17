@@ -97,7 +97,7 @@ function view(st) {
     stationary: !!state.stationary, attached: cu.members.length > 1, modelCount: state.models,
     allMonsterVehicle: sheets.length > 0 && sheets.every((d) => d.keywords.some((k) => ['MONSTER', 'VEHICLE'].includes(up(k)))),
     overwatch: showOverwatch && !!ui.overwatch[key], enabled };
-  const result = computeAttack({ type, groups, target: st.target, ctx, effects, unitKeywords: cu.keywords });
+  const result = computeAttack({ type, groups, target: st.target, ctx, effects: [...effects, ...adjustFx(st.target)], unitKeywords: cu.keywords });
 
   const sig = JSON.stringify([cu.uid, type, groups.map((x) => [displayName(x.weapon), x.models, x.modelName])]);
   if (sig !== ui.faSig) { ui.faSig = sig; ui.fa = {}; }
@@ -131,7 +131,7 @@ function view(st) {
         groups.length ? attackCard(env, shown, result.cards.indexOf(shown), follow)
           : h('p', { class: 'muted' }, type === 'melee' ? 'No melee weapon to fight with.' : 'No ranged weapon selected.'),
         result.cards.length ? totalCard(result.cards, st.target) : null,
-    result.cards.length ? compareCard(st, (t) => computeAttack({ type, groups, target: t, ctx, effects, unitKeywords: cu.keywords }).cards) : null,
+    result.cards.length ? compareCard(st, (t) => computeAttack({ type, groups, target: t, ctx, effects: [...effects, ...adjustFx(t)], unitKeywords: cu.keywords }).cards) : null,
         afterCard(env))),
   ];
 }
@@ -341,6 +341,30 @@ function stratCard(env, manualFx, manualOn, turnKey, stratId, stratOn) {
     manualFx.map(row));
 }
 
+// ---------- modifiers from other abilities ----------
+
+// Hit / wound / AP set by hand (e.g. the target's "-1 to hit"), kept on the target so presets remember them.
+// One always-on effect; the engine still caps hit and wound at ±1 overall.
+const adjustFx = (t) => (t.mods && Object.values(t.mods).some(Boolean)
+  ? [{ source: 'adjust', label: 'Other abilities', scope: 'unit', attack: 'any', mods: { ...t.mods } }] : []);
+
+const ADJUST = [['hit', 'Hit roll', -1, 1], ['wound', 'Wound roll', -1, 1], ['ap', 'AP (+1 = better)', -3, 3]];
+function adjustRow(t) {
+  const mods = t.mods ?? {};
+  const set = (k, v) => update((s) => { s.target.mods = { ...s.target.mods, [k]: v }; });
+  return h('div', { class: 'stack atk-adjust' },
+    h('strong', null, 'Other modifiers'),
+    h('span', { class: 'muted small' }, 'From abilities not in the list, e.g. the target gives -1 to hit. Saved with the target.'),
+    ADJUST.map(([k, label, lo, hi]) => {
+      const v = mods[k] ?? 0;
+      return h('div', { class: 'row spread nowrap' }, h('span', { id: `atk-adj-${k}-l` }, label),
+        h('div', { class: 'stepper', role: 'group', 'aria-labelledby': `atk-adj-${k}-l` },
+          h('button', { type: 'button', 'data-k': `atk-adj-${k}-dec`, 'aria-label': `${label} -1`, disabled: v <= lo, onclick: () => set(k, v - 1) }, '−'),
+          h('output', null, v > 0 ? `+${v}` : v),
+          h('button', { type: 'button', 'data-k': `atk-adj-${k}-inc`, 'aria-label': `${label} +1`, disabled: v >= hi, onclick: () => set(k, v + 1) }, '+')));
+    }));
+}
+
 // ---------- context toggles ----------
 
 function contextCard(env, showOverwatch) {
@@ -355,7 +379,8 @@ function contextCard(env, showOverwatch) {
       pill('atk-c-stationary', label('stationary', 'Remained stationary'), state.stationary, unit('stationary')),
       pill('atk-c-cover', 'Target in cover', st.target.cover, tgt('cover')),
       pill('atk-c-half', 'Target within half range', st.target.halfRange, tgt('halfRange')),
-      showOverwatch ? pill('atk-c-ow', 'Fire Overwatch (snap shooting)', ui.overwatch[key], () => local(() => { ui.overwatch[key] = !ui.overwatch[key]; })) : null));
+      showOverwatch ? pill('atk-c-ow', 'Fire Overwatch (snap shooting)', ui.overwatch[key], () => local(() => { ui.overwatch[key] = !ui.overwatch[key]; })) : null),
+    adjustRow(st.target));
 }
 
 // ---------- the dice card ----------

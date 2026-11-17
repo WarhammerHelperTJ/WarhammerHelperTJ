@@ -43,3 +43,6 @@
   .atk-mid { order: 1; }
   .atk-right { order: 2; }
 }
+
+.atk-adjust { border-top: 1px solid var(--line); padding-top: var(--s3); gap: var(--s2); }
+.atk-adjust .row { flex-wrap: nowrap; }

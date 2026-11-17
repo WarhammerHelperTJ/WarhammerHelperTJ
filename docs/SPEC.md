@@ -99,7 +99,7 @@ Stratagem `S` (same shape in `data/core/stratagems.json`):
 - `rosters[]`: `{id,name,faction,mode:"incursion"|"strike"|"custom",limit,detachments:[id],units:[U]}`
 - `U`: `{uid,datasheetId,size,ptsOverride,groups:[{model,count,weapons:[weaponName]}],enhancement,attachedTo,warlord}`
 - `game`: `{rosterId,round,turn:"me"|"opp",phase,cp,waaagh:{used,activeUntil},units:{[uid]:{riled,charged,advanced,stationary,shocked,models,wounds}},used:{[stratId]:phaseKey},unitStrat:{[uid]:phaseKey},once:{[key]:true}}`
-- `targets[]` presets + `target`: `{name,T,Sv,InSv,W,models,fnp,keywords:[],cover,halfRange,onObjective,hidden}`
+- `targets[]` presets + `target`: `{name,T,Sv,InSv,W,models,fnp,keywords:[],cover,halfRange,onObjective,hidden,mods:{hit,wound,ap}}`; `mods` are the Attack view's hand-set "Other modifiers" (hit/wound −1..+1, AP −3..+3), applied as one always-on effect labelled "Other abilities"
 - `settings`: `{capModifiers:true}`
 
 ## Engine contract (`js/engine/attack.js`)
