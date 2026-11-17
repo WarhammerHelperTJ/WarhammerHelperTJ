@@ -136,6 +136,7 @@ Dark only (table use), phone first, usable one-handed; on desktop the view is a 
 - Every tap target ≥ 48px high. Bottom tab bar (Army, Game, Attack, Strats), fixed, with safe-area padding. Primary actions sit in the lower half of the screen.
 - Components: card, chip (text + muted source), toggle pill, stepper (− n +), bottom sheet for rules text, segmented control, fold (`fold()` in dom.js: a `<details>` card that keeps its open state across repaints). In the Game view the turn tracker, ability cards and stratagem rules text are folds, closed by default; a stratagem keeps its name, CP and Use button visible.
 - Attack card: one row per step, left = step name, centre = big "roll N" and "need X+", right/below = chips; an input (stepper) under hit/wound to type the real result in follow-along mode; "Expected" line at the bottom; a Math / Follow-along segmented switch at the top of the screen.
+- Attack view: one dice card at a time, the weapon picked in the row above it; "Whole unit" and "Compare targets" still count every selected weapon. Wide screens (≥1000 px): abilities + stratagems | unit, target, situation | dice.
 - Any rule, ability or stratagem name is tappable and opens the full original text in a bottom sheet.
 - Accessibility: real `<button>`/`<input>`/`<label>`, visible focus ring, contrast ≥ 4.5:1, state never by colour alone, `prefers-reduced-motion` respected.
 

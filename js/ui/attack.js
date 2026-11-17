@@ -1,9 +1,9 @@
 // Attack screen (source 2.3): unit -> Shoot/Fight -> weapons per model group -> target -> one dice card per group of identical attacks.
-import { h, openSheet } from '../dom.js';
+import { h, openSheet, fold } from '../dom.js';
 import { get, update, subscribe } from '../store.js';
 import { loadCore, loadFaction, abilityByName, stratagemById, detachmentById, enhancementById, armyRuleById } from '../data.js';
 import { combatUnits, phaseKey, unitStart } from '../game.js';
-import { availableStratagems } from '../engine/stratagems.js';
+import { availableStratagems, phaseReminders } from '../engine/stratagems.js';
 import { effectsForUnit } from '../engine/collect.js';
 import { computeAttack, followAlong, summarize } from '../engine/attack.js';
 import { roll } from '../engine/dice.js';
@@ -15,7 +15,8 @@ let root, unsub, core;
 const loaded = new Map();
 // View state, not persisted. sel: `${uid}|${type}` -> weaponChoices selection; manual: `${round}-${turn}|${uid}` -> [source];
 // fa: card title -> follow-along inputs, cleared when the weapon selection changes.
-const ui = { uid: null, type: {}, sel: {}, manual: {}, overwatch: {}, targetOpen: false, fa: {}, faSig: null };
+// pick: `${uid}|${type}` -> weapon names of the dice card shown (only one card at a time; Whole unit still counts all).
+const ui = { uid: null, type: {}, sel: {}, manual: {}, overwatch: {}, targetOpen: false, fa: {}, faSig: null, pick: {} };
 
 // Same guard as the Game view: a blur commit must not rebuild the DOM under a pressed pointer.
 let down = false, pending = false, queued = false;
@@ -103,19 +104,35 @@ function view(st) {
 
   const env = { st, g, fac, cu, cus, key, type, state, sheets, choices, effects, groups, result };
   const follow = st.settings.attackMode === 'follow';
+  // one dice card at a time: the weapon picked above it (falls back to the first when the pick no longer fires)
+  const names = (c) => c.weapons.map((x) => x.name).join(' + ');
+  const shown = result.cards.find((c) => names(c) === ui.pick[selKey]) ?? result.cards[0];
+  const reminders = phaseReminders({ phase: g.phase, turn: g.turn, units: [cu], faction: fac });
   return [
     h('div', { class: 'row spread' }, title,
       seg('atk-mode', 'Mode', [['math', 'Math'], ['follow', 'Follow-along']], follow ? 'follow' : 'math',
         (v) => update((s) => { s.settings = { ...s.settings, attackMode: v }; }))),
-    unitCard(env, sel, selKey),
-    targetCard(st.target),
-    manualFx.length ? stratCard(env, manualFx, manualOn, turnKey, stratId, stratOn) : null,
-    contextCard(env, showOverwatch),
-    groups.length ? result.cards.map((c, i) => attackCard(env, c, i, follow))
-      : h('p', { class: 'muted' }, type === 'melee' ? 'No melee weapon to fight with.' : 'No ranged weapon selected.'),
-    result.cards.length ? totalCard(result.cards, st.target) : null,
+    // phone: setup, then abilities/stratagems, then dice (atk-mid comes first via CSS order); wide: three columns
+    h('div', { class: 'atk-cols' },
+      h('div', { class: 'stack atk-left' },
+        manualFx.length ? stratCard(env, manualFx, manualOn, turnKey, stratId, stratOn) : null,
+        reminders.length ? h('section', { class: 'stack', 'aria-label': 'Abilities this phase' },
+          reminders.map((r) => fold(`atk-ab:${r.unitName}:${r.abilityName}`, 'card ability',
+            h('div', null, h('h3', null, r.abilityName), h('div', { class: 'muted small' }, r.always ? 'Always on' : 'This phase')),
+            h('div', { class: 'rules-text' }, r.text)))) : null),
+      h('div', { class: 'stack atk-mid' },
+        unitCard(env, sel, selKey),
+        targetCard(st.target),
+        contextCard(env, showOverwatch)),
+      h('div', { class: 'stack atk-right' },
+        result.cards.length > 1 ? h('div', { class: 'row atk-pick', role: 'group', 'aria-label': 'Weapon to show' },
+          result.cards.map((c, i) => pill(`atk-pick-${i}`, `${names(c)} ×${c.weapons.reduce((n, x) => n + x.models, 0)}`, c === shown,
+            () => local(() => { ui.pick[selKey] = names(c); })))) : null,
+        groups.length ? attackCard(env, shown, result.cards.indexOf(shown), follow)
+          : h('p', { class: 'muted' }, type === 'melee' ? 'No melee weapon to fight with.' : 'No ranged weapon selected.'),
+        result.cards.length ? totalCard(result.cards, st.target) : null,
     result.cards.length ? compareCard(st, (t) => computeAttack({ type, groups, target: t, ctx, effects, unitKeywords: cu.keywords }).cards) : null,
-    afterCard(env),
+        afterCard(env))),
   ];
 }
 
