@@ -38,4 +38,12 @@ async function importRoster(code) {
 
 addEventListener('hashchange', route);
 route();
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+if ('serviceWorker' in navigator) {
+  // A new version took over (a deploy): reload once so the page shows it. Not on the very first install.
+  const hadWorker = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (hadWorker) location.reload(); });
+  navigator.serviceWorker.register('sw.js').then((reg) => {
+    // a home-screen app reopened from the background does not reload by itself: look for a new version then
+    addEventListener('visibilitychange', () => { if (!document.hidden) reg.update().catch(() => {}); });
+  }).catch(() => {});
+}

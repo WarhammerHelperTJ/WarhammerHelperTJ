@@ -58,9 +58,9 @@
 - `tools/serve.mjs` — static dev server on :5173 (`PORT` env overrides)
 - `tools/smoke.mjs` — `npm run smoke`: headless Chrome/Edge via DevTools Protocol, every tab × every faction, fails on errors or a stuck "Loading…"
 - `README.md` — run, test, deploy, add a faction, known limits
-- `sw.js` — network-first service worker (`dicehelper-v2`; cache only answers offline); precache list between `PRECACHE-START/END` markers, generated; inactive on localhost
-- `tools/build-sw.mjs` — writes the precache list into `sw.js` (`npm run sw`); exports `shellFiles`, `listIn`
-- `tests/sw.test.mjs` — fails when the `sw.js` precache list differs from files on disk
+- `sw.js` — network-first service worker (cache `dicehelper-<VERSION>`; cache only answers offline); VERSION + precache list between `PRECACHE-START/END` markers, generated; inactive on localhost
+- `tools/build-sw.mjs` — writes the version hash and precache list into `sw.js` (`npm run sw`); exports `shellFiles`, `version`, `listIn`, `versionIn`
+- `tests/sw.test.mjs` — fails when the `sw.js` precache list or version differs from files on disk
 - `manifest.webmanifest`, `icon.svg` — PWA manifest and flat die-face icon
 - `tests/` — `node --test` suites (`data.test.mjs`: generated JSON vs source, parser, data.js)
 - `.claude/launch.json` — dev server config for the preview pane
