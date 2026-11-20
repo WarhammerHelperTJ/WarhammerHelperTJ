@@ -35,6 +35,13 @@ export function unitStart(cu, faction) {
     models, wounds: models === 1 ? (d?.models.at(-1)?.W ?? null) : null };
 }
 
+/** Below Starting Strength / Below Half-strength from the tracked state (a one-model unit counts its wounds). */
+export function strength(cu, faction, state) {
+  const full = unitStart(cu, faction);
+  const [now, max] = full.models === 1 && full.wounds != null ? [state.wounds ?? full.wounds, full.wounds] : [state.models ?? full.models, full.models];
+  return { belowStart: now < max, belowHalf: now * 2 < max };
+}
+
 /** SPEC game shape plus `first` ("me"|"opp": who has the first turn of each round). */
 /** Always-on army rules that only count while the Warlord has them (faction game.json "warlordRules"). */
 export function warlordRules(roster, faction) {

@@ -1,6 +1,6 @@
 # Dice Helper
 
-Phone-first web app for Warhammer 40k (11th edition, Orks and Emperor's Children): build an army, track the game, and get dice-by-dice attack cards.
+Phone-first web app for Warhammer 40k (11th edition, Orks, Emperor's Children and Adepta Sororitas): build an army, track the game, and get dice-by-dice attack cards.
 Plain ES modules, no build step, no dependencies. Works offline after the first visit.
 
 ## Run
@@ -41,5 +41,6 @@ Army → open a roster → **Share roster link**. Opening the link on another de
 
 - Effects cover the attack-side rules of all 15 Ork detachments, Ork unit abilities and Emperor's Children. Not modelled: Hunta Rig (+2 A per embarked model), Dreadherder (buffs another unit), Mekwaaagh! Mastermind and Da Boss is Watchin' (use the Riled up toggle). Defensive rules ("subtract 1 from the Hit roll" against your unit) are reminders only (Strats pane, Abilities pane), not dice.
 - Emperor's Children: extra points for optional wargear (Defiler) are not added; the Legions of Excess points cap in Carnival of Excess is not checked.
+- Adepta Sororitas: Miracle dice and Acts of Faith are rules text only (no dice pool); the REVEREND detachment limit is not checked. Choices made in play (Vows of Atonement, Righteous units, the quarry, a judged target, "within 6\"" auras) are toggles in the Attack view. Blood of Martyrs reads the models (or wounds) left from the Game view.
 - Wargear legality is not enforced.
 - No defending mode.

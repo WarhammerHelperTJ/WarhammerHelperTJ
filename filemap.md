@@ -8,6 +8,9 @@
 - `data/emperors-children/effects.json` — hand-written effects overlay for Emperor's Children (same schema as the Orks one)
 - `data/emperors-children/game.json` — hand-written: `abilityPhases` (Intoxicating Musk in Fight)
 - `tests/emperors-children.test.mjs` — Emperor's Children data, keyword matching, enhancements, leaders, effects
+- `docs/source/adepta-sororitas-11e.md` — Adepta Sororitas Parts B and C from Wahapedia (source of truth)
+- `data/adepta-sororitas/effects.json` — hand-written effects overlay for Adepta Sororitas (same schema as the Orks one)
+- `tests/adepta-sororitas.test.mjs` — Adepta Sororitas data, effect sources, Blood of Martyrs / strength, stratagems, enhancements, leaders and support
 - `package.json` — npm scripts (start, test, data); no dependencies
 - `index.html` — app shell: `<main id="view">` + bottom tab bar
 - `css/app.css` — design tokens + shared components (class list in its top comment)
@@ -50,6 +53,7 @@
 - `data/core/abilities.json`, `data/core/stratagems.json` — generated from source A3 / A4
 - `data/orks/datasheets.json`, `data/orks/detachments.json` — generated from source Part C / Part B
 - `data/emperors-children/datasheets.json`, `data/emperors-children/detachments.json` — generated from `emperors-children-11e.md`
+- `data/adepta-sororitas/datasheets.json`, `data/adepta-sororitas/detachments.json` — generated from `adepta-sororitas-11e.md`
 - `data/orks/effects.json` — hand-written effects overlay (SPEC schema; extra `grant:true` = buff another unit's ability gives)
 - `data/factions.json` — hand-written list of factions with data `[{id,name}]`
 - `data/orks/example-roster.json` — hand-written 500 pt example roster template (source 2.1); `attachedTo` is a unit index

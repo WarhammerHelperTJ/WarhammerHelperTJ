@@ -2,7 +2,7 @@
 import { h, openSheet, fold } from '../dom.js';
 import { get, update, subscribe } from '../store.js';
 import { loadCore, loadFaction, abilityByName, stratagemById, detachmentById, enhancementById, armyRuleById } from '../data.js';
-import { combatUnits, phaseKey, unitStart } from '../game.js';
+import { combatUnits, phaseKey, unitStart, strength } from '../game.js';
 import { availableStratagems, phaseReminders } from '../engine/stratagems.js';
 import { effectsForUnit } from '../engine/collect.js';
 import { computeAttack, followAlong, summarize } from '../engine/attack.js';
@@ -96,7 +96,7 @@ function view(st) {
   const ctx = { phase: g.phase, turn: g.turn, riledUp: !!state.riled, charged: !!state.charged, advanced: !!state.advanced,
     stationary: !!state.stationary, attached: cu.members.length > 1, modelCount: state.models,
     allMonsterVehicle: sheets.length > 0 && sheets.every((d) => d.keywords.some((k) => ['MONSTER', 'VEHICLE'].includes(up(k)))),
-    overwatch: showOverwatch && !!ui.overwatch[key], enabled };
+    overwatch: showOverwatch && !!ui.overwatch[key], enabled, ...strength(cu, fac, state) };
   const result = computeAttack({ type, groups, target: st.target, ctx, effects: [...effects, ...adjustFx(st.target)], unitKeywords: cu.keywords });
 
   const sig = JSON.stringify([cu.uid, type, groups.map((x) => [displayName(x.weapon), x.models, x.modelName])]);

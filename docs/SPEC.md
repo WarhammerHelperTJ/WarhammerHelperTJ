@@ -8,7 +8,7 @@ Product requirements, dice rules and all rules data live in `docs/source/orks-11
 - Structured effects (modifiers) encoded for War Horde, the core rules and the example roster (Warboss in Mega Armour, Meganobz, Deff Dread, Boyz, Mek, Gretchin). Everything else still works with weapon-profile maths and shows its rules text; the user applies those modifiers with manual chips.
 
 ## Non-goals (MVP)
-- Factions beyond Orks and Emperor's Children (`docs/source/emperors-children-11e.md`), opponent datasheets, "defending" mode, Boarding Actions.
+- Factions beyond Orks, Emperor's Children (`docs/source/emperors-children-11e.md`) and Adepta Sororitas (`docs/source/adepta-sororitas-11e.md`), opponent datasheets, "defending" mode, Boarding Actions.
 - Enforcing wargear-option legality (see Wargear below). Enforcing army-construction legality beyond DP, points total, leader/support attach lists and enhancement restrictions.
 - Effects for the other 14 detachments and remaining datasheets (follow-up, JSON only).
 - Animated dice roller (a plain "roll for me" button is in).
@@ -85,7 +85,7 @@ Stratagem `S` (same shape in `data/core/stratagems.json`):
   "attack": "melee",                           // melee | ranged | any
   "when": { "riledUp": true, "charged": true, "phase": "fight", "targetHas": ["MONSTER","VEHICLE"],
             "targetNot": [], "halfRange": true, "onObjective": true, "attached": true, "minModels": 11,
-            "unitHas": ["BOYZ"], "targetMaxT": 6 },             // every key optional, all must hold
+            "unitHas": ["BOYZ"], "targetMaxT": 6, "belowStart": true, "belowHalf": true },             // every key optional, all must hold
   "mods": { "a": 1, "hit": 1, "wound": 1, "ap": 1, "s": 2, "d": 1, "critHit": 5, "critWound": 3, "ignoreMods": ["hit","wound"],
             "rerollHit": "ones"|"all", "rerollWound": "ones"|"all",
             "abilities": ["SUSTAINED HITS 1"], "bump": {"RAPID FIRE": 1} },

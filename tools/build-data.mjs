@@ -8,6 +8,7 @@ const ROOT = new URL('../', import.meta.url);
 const FACTIONS = [
   { id: 'orks', file: 'orks-11e.md', keyword: 'ORKS', core: true },
   { id: 'emperors-children', file: 'emperors-children-11e.md', keyword: null },
+  { id: 'adepta-sororitas', file: 'adepta-sororitas-11e.md', keyword: null },
 ];
 let L, used, issues, FACTION_KW;
 const FORCE_DISPOSITIONS = ['Take and Hold', 'Disruption', 'Purge the Foe', 'Priority Assets', 'Reconnaissance'];
